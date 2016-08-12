@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"> </script>    <style>
+        .axis path, .axis line {
+            fill: none;
+            stroke: #333;
+        }
+
+        .axis .grid-line {
+            stroke: #000;
+            stroke-opacity: 0.2;
+        }
+
+        .axis text {
+            font: 10px Verdana;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!--<h2>Button Tags</h2>-->
+        <button type="button" id ="day" class="btn btn-info" onclick="viewByDay('day')">Day</button>
+            <div class="dropdown">
+                <button id="month2" class="btn btn-primary dropdown-toggle" type="button" onclick="viewByMonth('month')" data-toggle="dropdown">
+                    Month
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">6</a></li>
+                    <li><a href="#">7</a></li>
+                    <li><a href="#">8</a></li>
+                    <li><a href="#">9</a></li>
+                    <li><a href="#">10</a></li>
+                    <li><a href="#">11</a></li>
+                    <li><a href="#">12</a></li>
+                </ul>
+            </div>
+            <button type="button" id ="month" class="btn btn-info" onclick="viewByMonth('month')" checked>Month</button>
+            <button type="button" id ="year" class="btn btn-info" onclick="viewByYear('year')">Year</button>
+
+    
+    </div>
+
+    <script type="text/javascript"></script>
+    <script src="visualProj.js"></script>
+</body>
+</html>
