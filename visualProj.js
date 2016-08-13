@@ -17,30 +17,77 @@ $(".dropdown-menu a").click(function () {
     $(this).closest(".dropdown-menu").prev().dropdown("toggle");
 });
 
-function StringSet() {
-    var setObj = {}, val = {};
+var YAxisMaxValueYear = 0;
+var YAxisMaxValueMonth = 0;
+var flag = '';
+d3.json("NewsItemsData.json", initialize);
+function initialize(d)
+{
+    //document.write("ya tut");
+    //initialize array of categoriesNames TBD
+    arrOfCategories = new Array(2);
+    arrOfCategories[0] = 'JRCNuclearSecurity';
+    arrOfCategories[1] = 'UNbodies';
+    //document.write("category is " + arrOfCategories + "&nbsp" + "<br>");
 
-    this.add = function (str) {
-        setObj[str] = val;
-    };
-
-    this.contains = function (str) {
-        return setObj[str] === val;
-    };
-
-    this.remove = function (str) {
-        delete setObj[str];
-    };
-
-    this.values = function () {
-        var values = [];
-        for (var i in setObj) {
-            if (setObj[i] === val) {
-                values.push(i);
+    //initialize year max and month max
+    var time = Create2DArray();
+    var yearTime = new Array(13).fill(0);
+    var arr = d;
+    var newsTime;
+    var tmp, date, day, month;
+    for (z = 0; z < arrOfCategories.length; z++) {
+        var currCat = arrOfCategories[z];
+        for (i = 0; i < d.length; i++) {
+            tmp = arr[i]['category'];
+            if ('category' in arr[i]) {
+                for (j = 0; j < tmp.length; j++) {
+                    if (tmp[j]['term'] == currCat) {
+                        newsTime = arr[i]['dc:date'];
+                        date = newsTime.replace('T', '-').split("-", 3);
+                        month = parseInt(date[1]);
+                        day = parseInt(date[2]);
+                        time[month][day]++;
+                        yearTime[month]++;
+                    }
+                }
             }
         }
-        return values;
-    };
+
+        //flag = 'byYear';
+        tmp = initMaxYearAndMaxMonth(yearTime, 'byYear');
+        if (tmp > YAxisMaxValueYear) {
+            YAxisMaxValueYear = tmp;
+        }
+        //flag = 'byMonth';
+        tmp = initMaxYearAndMaxMonth(time, 'byMonth');
+        if (tmp > YAxisMaxValueMonth) {
+            YAxisMaxValueMonth = tmp;
+        }
+    }
+    //document.write("YAxisMaxValueYear = " + YAxisMaxValueYear + "&nbsp" + "<br>" + "YAxisMaxValueMonth = " + YAxisMaxValueMonth + "&nbsp" + "<br>");
+}
+function initMaxYearAndMaxMonth(numbers, flag)
+{
+    var max = 0;
+    if (flag == 'byYear') {
+        for (var i = 0; i < numbers.length; i++) {
+
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+        }
+    }
+    else if (flag = 'byMonth') {
+        for(var i = 0; i < numbers.length; i++) {
+            for (var j = 0; j < numbers[i].length; j++) {
+                if (numbers[i][j] > max) {
+                    max = numbers[i][j];
+                }
+            }
+        }
+    }
+    return max;
 }
 
 function drawSmallMultiplesByCategory(viewBy)
@@ -70,11 +117,14 @@ function drawSmallMultiplesByCategory(viewBy)
 
 
 function execute(viewBy, currCategory) {
-    var flag = 'byMonth';
+    
     var view = viewBy;
     if (viewBy == '2016')
     {
         flag = 'byYear';
+    }
+    else {
+        flag = 'byMonth';
     }
     //var time;
     d3.json("NewsItemsData.json", convert);
@@ -104,10 +154,14 @@ function execute(viewBy, currCategory) {
         }
         
         function getmax(view) {
-            var numbers = time[view];
+            var numbers = [];
             if (flag == 'byYear')
             {
                 numbers = yearTime;
+            }
+            else if (flag = 'byMonth')
+            {
+                numbers = time[view];
             }
             max = numbers[0];
             for (var i = 0; i < numbers.length; i++) {
@@ -118,18 +172,13 @@ function execute(viewBy, currCategory) {
             return max;
         }
 
-        function Create2DArray(){
-            var arr = new Array(13);
-            for (var i = 0; i < 13; i++) {
-                arr[i] = new Array(32).fill(0);
-            }
-            return arr;
-        }
+        
 
         var height = 500,
         width = 500,
         margin = 30,
-        YAxisMaxValue = getmax(view) + 10;
+        //YAxisMaxValue = getmax(view) + 10;
+        YAxisMaxValue = (flag == 'byYear') ? YAxisMaxValueYear : YAxisMaxValueMonth;
         data = [];
         //// создание объекта svg
         //d3.select("body").selectAll("svg").remove();
@@ -223,3 +272,10 @@ function execute(viewBy, currCategory) {
 }
 
 
+function Create2DArray() {
+    var arr = new Array(13);
+    for (var i = 0; i < 13; i++) {
+        arr[i] = new Array(32).fill(0);
+    }
+    return arr;
+}
