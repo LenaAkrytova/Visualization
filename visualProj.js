@@ -1,22 +1,39 @@
-﻿document.getElementById("day").addEventListener("click", function (viewBy) {
-    execute(viewBy);
-});
+﻿
 document.getElementById("month").addEventListener("click", function (viewBy) {
-    execute(viewBy);
+    //execute(viewBy);
 });
 document.getElementById("year").addEventListener("click", function (viewBy) {
-    execute(viewBy);
+    //execute(viewBy);
 });
 
-document.getElementById('month').click();
+$('div.dropdown ul.dropdown-menu li a').click(function (e) {
+    var $div = $(this).parent().parent().parent();
+    var $btn = $div.find('button');
+    execute($(this).text());
+    //alert($(this).text());
+    return false;
+});
+$(".dropdown-menu a").click(function () {
+    $(this).closest(".dropdown-menu").prev().dropdown("toggle");
+});
+
+//document.getElementById('month').click();
+////e.preventDefault();
+
+//document.getElementById('month').click();
 
 function execute(viewBy) {
-
+    var flag = 'byMonth';
     var view = viewBy;
-    var time;
+    if (viewBy == '2016')
+    {
+        flag = 'byYear';
+    }
+    //var time;
     d3.json("NewsItemsData.json", convert);
     function convert(d) {
-        var time = new Array(32).fill(0);
+        var time = Create2DArray();
+        var yearTime = new Array(13).fill(0); 
         var arr = d;
         var category = "JRCNuclearSecurity";
 
@@ -32,21 +49,43 @@ function execute(viewBy) {
                         //document.write("newsTime is " + newsTime + "&nbsp" + "<br>");
                         date = newsTime.replace('T', '-').split("-", 3);
                         //document.write("date is " + date + "&nbsp" + "<br>");
+                        month = parseInt(date[1]);
                         day = parseInt(date[2]);
                         //document.write("day is " + day + "&nbsp" + "<br>");
-                        time[day]++;
-                        //document.write("time is " + time[day] + "&nbsp" + "<br>");
+                        //document.write("month is " + month + "&nbsp" + "<br>");
+                        time[month][day]++;
+                        yearTime[month]++;
                     }
                 }
             }
-            else {
-                //document.write("Error reading entity" + "&nbsp" + i + "&nbsp" + arr[i] + "&nbsp" + "<br>");
-            }
+            //else {
+            //    //document.write("Error reading entity" + "&nbsp" + i + "&nbsp" + arr[i] + "&nbsp" + "<br>");
+            //}
         }
+        //document.write("yearTime: " + yearTime + "&nbsp" + "<br>");
 
-        function getmax() {
-            var numbers = time,
-                max = numbers[0];
+        //document.write(JSON.stringify(time) + "&nbsp" + "<br>" + "<br>");
+        //document.write("time length: "  +time.length + "&nbsp" + "<br>" + "<br>");
+        
+
+        //for (var i = 0; i < time[i].length; i++) {
+        //for (var z = 0; z < time.length; z++) {
+        //        document.write(time[i][z] + "&nbsp");
+        //        //console.log(a[z][i]);
+        //    }
+        //    document.write("<br>");
+        //}
+      
+        //document.write("time is " + time + "&nbsp" + "<br>");
+
+
+        function getmax(view) {
+            var numbers = time[view];
+            if (flag == 'byYear')
+            {
+                numbers = yearTime;
+            }
+            max = numbers[0];
             for (var i = 0; i < numbers.length; i++) {
                 if (numbers[i] > max) {
                     max = numbers[i];
@@ -56,12 +95,20 @@ function execute(viewBy) {
             return max;
         }
 
+        function Create2DArray(){
+            var arr = new Array(13);
+            for (var i = 0; i < 13; i++) {
+                arr[i] = new Array(32).fill(0);
+            }
+            return arr;
+        }
+
 
 
         var height = 500,
         width = 500,
         margin = 30,
-        YAxisMaxValue = getmax() + 10;
+        YAxisMaxValue = getmax(view) + 10;
         //document.write(YAxisMaxValue + "&nbsp" + "<br>");
         data = [];
         //// создание объекта svg
@@ -74,19 +121,37 @@ function execute(viewBy) {
 
         var xAxisLength = width - 2 * margin;//// длина оси Y = высота контейнера svg - отступ сверху и снизу
         var yAxisLength = height - 2 * margin;//// функция интерполяции значений на ось Х  
+        var scaleNum = 32;
+        
+        if (flag == 'byYear') {
+            scaleNum = 13;
+        }
+
         var scaleX = d3.scale.linear()
-                    .domain([0, 32])
+                    .domain([0, scaleNum])
                     .range([0, xAxisLength]);//// функция интерполяции значений на ось Y
         var scaleY = d3.scale.linear()
                     .domain([YAxisMaxValue, 0])
                     .range([0, yAxisLength]);//// масштабирование реальных данных в данные для нашей координатной системы
 
         //document.write(time + "&nbsp" + "<br>");
-        for (i = 0; i < time.length; i++)
-            data.push({ x: scaleX(i) + margin, y: scaleY(time[i]) + margin });//// создаем ось X   
+        if (flag == 'byMonth')
+        {
+            for (i = 0; i < time[view].length; i++) {
+                var temp = time[view][i];
+                data.push({ x: scaleX(i) + margin, y: scaleY(temp) + margin });//// создаем ось X  
+                //document.write("i = " + i + "time[3][i] = " + temp + "&nbsp" + "<br>");
+            }
+        }
+        else if (flag == 'byYear')
+        {
+            for (i = 0; i < yearTime.length; i++) {
+                data.push({ x: scaleX(i) + margin, y: scaleY(yearTime[i]) + margin });//// создаем ось X  
+            }
+        }
         var xAxis = d3.svg.axis()
                      .scale(scaleX)
-                     .orient("bottom");//// создаем ось Y             
+                     .orient("bottom");//// создаем ось Y  
         var yAxis = d3.svg.axis()
                      .scale(scaleY)
                      .orient("left");//// отрисовка оси Х             
@@ -121,6 +186,7 @@ function execute(viewBy) {
         .attr("d", line(data))
         .style("stroke", "steelblue")
         .style("stroke-width", 2);
+        //document.write("yAxis: " + yAxis + "&nbsp" + "<br>");
     }
 }
 
