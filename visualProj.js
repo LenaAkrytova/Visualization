@@ -20,24 +20,43 @@ $(".dropdown-menu a").click(function () {
 var YAxisMaxValueYear = 0;
 var YAxisMaxValueMonth = 0;
 var flag = '';
+var set;
+var arrOfCategories;// = new Array(2);
+
 d3.json("NewsItemsData.json", initialize);
 function initialize(d)
 {
-    //document.write("ya tut");
-    //initialize array of categoriesNames TBD
-    arrOfCategories = new Array(2);
-    arrOfCategories[0] = 'JRCNuclearSecurity';
-    arrOfCategories[1] = 'UNbodies';
-    //document.write("category is " + arrOfCategories + "&nbsp" + "<br>");
-
-    //initialize year max and month max
     var time = Create2DArray();
     var yearTime = new Array(13).fill(0);
     var arr = d;
     var newsTime;
     var tmp, date, day, month;
+    set = new StringSet();
+    //document.write("ya tut");
+    //initialize array of categoriesNames TBD
+    for (i = 0; i < d.length; i++) {
+        tmp = arr[i]['category'];
+        if ('category' in arr[i]) {
+            for (j = 0; j < tmp.length; j++) {
+                set.add(tmp[j]['term']);
+            }
+        }
+    }
+    arrOfCategories = set.values();
+
+
+
+    //arrOfCategories[0] = 'JRCNuclearSecurity';
+    //arrOfCategories[1] = 'UNbodies';
+    //document.write("category is " + arrOfCategories + "&nbsp" + "<br>");
+
+    //initialize year max and month max
     for (z = 0; z < arrOfCategories.length; z++) {
         var currCat = arrOfCategories[z];
+        for (var i = 0; i < 13; i++) {
+            time[i].fill(0);
+        }
+        yearTime.fill(0);
         for (i = 0; i < d.length; i++) {
             tmp = arr[i]['category'];
             if ('category' in arr[i]) {
@@ -53,7 +72,6 @@ function initialize(d)
                 }
             }
         }
-
         //flag = 'byYear';
         tmp = initMaxYearAndMaxMonth(yearTime, 'byYear');
         if (tmp > YAxisMaxValueYear) {
@@ -65,6 +83,7 @@ function initialize(d)
             YAxisMaxValueMonth = tmp;
         }
     }
+    //document.write("set is: " + set.values() + "&nbsp" + "<br>");
     //document.write("YAxisMaxValueYear = " + YAxisMaxValueYear + "&nbsp" + "<br>" + "YAxisMaxValueMonth = " + YAxisMaxValueMonth + "&nbsp" + "<br>");
 }
 function initMaxYearAndMaxMonth(numbers, flag)
@@ -72,10 +91,11 @@ function initMaxYearAndMaxMonth(numbers, flag)
     var max = 0;
     if (flag == 'byYear') {
         for (var i = 0; i < numbers.length; i++) {
-
+            //document.write("numbers: " + numbers + "&nbsp" + "<br>");
             if (numbers[i] > max) {
                 max = numbers[i];
             }
+            //document.write("i = " + i + "&nbsp" + "max[i] = " + max + "&nbsp" + "<br>");
         }
     }
     else if (flag = 'byMonth') {
@@ -94,12 +114,17 @@ function drawSmallMultiplesByCategory(viewBy)
 {
     d3.select("body").selectAll("svg").remove();
 
-    execute(viewBy, 'JRCNuclearSecurity');
-    execute(viewBy, 'UNbodies');
+    for (i = 0; i < 6; i++)
+    {
+        execute(viewBy, arrOfCategories[i]);
+    }
+    
+    //execute(viewBy, 'JRCNuclearSecurity');
+    //execute(viewBy, 'UNbodies');
 
 
     //d3.json("NewsItemsData.json", createArr());
-    //var set = new StringSet();
+    //set = new StringSet();
     //set.add("foo");
     //set.add("bar");
 
@@ -179,6 +204,7 @@ function execute(viewBy, currCategory) {
         margin = 30,
         //YAxisMaxValue = getmax(view) + 10;
         YAxisMaxValue = (flag == 'byYear') ? YAxisMaxValueYear : YAxisMaxValueMonth;
+        YAxisMaxValue += 10;
         data = [];
         //// создание объекта svg
         //d3.select("body").selectAll("svg").remove();
@@ -278,4 +304,30 @@ function Create2DArray() {
         arr[i] = new Array(32).fill(0);
     }
     return arr;
+}
+
+function StringSet() {
+    var setObj = {}, val = {};
+
+    this.add = function (str) {
+        setObj[str] = val;
+    };
+
+    this.contains = function (str) {
+        return setObj[str] === val;
+    };
+
+    this.remove = function (str) {
+        delete setObj[str];
+    };
+
+    this.values = function () {
+        var values = [];
+        for (var i in setObj) {
+            if (setObj[i] === val) {
+                values.push(i);
+            }
+        }
+        return values;
+    };
 }
