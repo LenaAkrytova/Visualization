@@ -43,11 +43,7 @@ function execute(viewBy) {
                 //document.write("Error reading entity" + "&nbsp" + i + "&nbsp" + arr[i] + "&nbsp" + "<br>");
             }
         }
-        //for(i = 0; i < time.length; i++)
-        //{
-        //    document.write(time[i] + "&nbsp" + "<br>");
-        //}
-        //document.write(time + "&nbsp" + "<br>");
+
         function getmax() {
             var numbers = time,
                 max = numbers[0];
