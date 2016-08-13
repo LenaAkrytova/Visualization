@@ -17,11 +17,7 @@ $(".dropdown-menu a").click(function () {
     $(this).closest(".dropdown-menu").prev().dropdown("toggle");
 });
 
-//document.getElementById('month').click();
-////e.preventDefault();
-
-//document.getElementById('month').click();
-
+/
 function execute(viewBy) {
     var flag = 'byMonth';
     var view = viewBy;
@@ -46,9 +42,7 @@ function execute(viewBy) {
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == category) {
                         newsTime = arr[i]['dc:date'];
-                        //document.write("newsTime is " + newsTime + "&nbsp" + "<br>");
                         date = newsTime.replace('T', '-').split("-", 3);
-                        //document.write("date is " + date + "&nbsp" + "<br>");
                         month = parseInt(date[1]);
                         day = parseInt(date[2]);
                         //document.write("day is " + day + "&nbsp" + "<br>");
