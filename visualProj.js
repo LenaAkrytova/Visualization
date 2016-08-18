@@ -63,7 +63,7 @@ function initialize(d)
             if ('category' in arr[i]) {
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == currCat) {
-                        newsTime = arr[i]['dc:date'];
+                        newsTime = arr[i]['published'];
                         date = newsTime.replace('T', '-').split("-", 3);
                         month = parseInt(date[1]);
                         day = parseInt(date[2]);
@@ -168,7 +168,7 @@ function execute(viewBy, currCategory) {
             if ('category' in arr[i]) {
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == category) {
-                        newsTime = arr[i]['dc:date'];
+                        newsTime = arr[i]['published'];
                         date = newsTime.replace('T', '-').split("-", 3);
                         month = parseInt(date[1]);
                         day = parseInt(date[2]);
