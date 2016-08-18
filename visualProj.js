@@ -23,7 +23,8 @@ var flag = '';
 var set;
 var arrOfCategories;// = new Array(2);
 
-d3.json("NewsItemsData.json", initialize);
+//d3.json("NewsItemsData.json", initialize);
+d3.json("NewsItemsSmallData.json", initialize);
 function initialize(d)
 {
     var time = Create2DArray();
