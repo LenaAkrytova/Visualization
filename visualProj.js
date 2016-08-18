@@ -42,6 +42,10 @@ function initialize(d)
                 set.add(tmp[j]['term']);
             }
         }
+        else
+        {
+            alert(set.contains("fignya kakaya-to"));
+        }
     }
     arrOfCategories = set.values();
 
@@ -63,7 +67,7 @@ function initialize(d)
             if ('category' in arr[i]) {
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == currCat) {
-                        newsTime = arr[i]['published'];
+                        newsTime = arr[i]['date'];
                         date = newsTime.replace('T', '-').split("-", 3);
                         month = parseInt(date[1]);
                         day = parseInt(date[2]);
@@ -168,7 +172,7 @@ function execute(viewBy, currCategory) {
             if ('category' in arr[i]) {
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == category) {
-                        newsTime = arr[i]['published'];
+                        newsTime = arr[i]['date'];
                         date = newsTime.replace('T', '-').split("-", 3);
                         month = parseInt(date[1]);
                         day = parseInt(date[2]);
