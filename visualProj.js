@@ -10,7 +10,6 @@ $('div.dropdown ul.dropdown-menu li a').click(function (e) {
     var $div = $(this).parent().parent().parent();
     var $btn = $div.find('button');
     drawSmallMultiplesByCategory($(this).text());
-    //alert($(this).text());
     return false;
 });
 $(".dropdown-menu a").click(function () {
@@ -21,9 +20,9 @@ var YAxisMaxValueYear = 0;
 var YAxisMaxValueMonth = 0;
 var flag = '';
 var set;
-var arrOfCategories;// = new Array(2);
+var arrOfCategories;
 
-//d3.json("NewsItemsData.json", initialize);
+//d3.json("NewsItemsData1.json", initialize);
 d3.json("NewsItemsSmallData.json", initialize);
 function initialize(d)
 {
@@ -33,9 +32,9 @@ function initialize(d)
     var newsTime;
     var tmp, date, day, month;
     set = new StringSet();
-    //document.write("ya tut");
+    
     //initialize array of categoriesNames TBD
-    for (i = 0; i < d.length; i++) {
+    for (i = 0; i < arr.length; i++) {
         tmp = arr[i]['category'];
         if ('category' in arr[i]) {
             for (j = 0; j < tmp.length; j++) {
@@ -44,10 +43,12 @@ function initialize(d)
         }
         else
         {
-            alert(set.contains("fignya kakaya-to"));
+            //document.write("ya tut" + "<br>");
+            //alert(set.contains("fignya kakaya-to"));
         }
     }
     arrOfCategories = set.values();
+    //document.write(arrOfCategories + "<br>");
 
 
 
@@ -58,6 +59,7 @@ function initialize(d)
     //initialize year max and month max
     for (z = 0; z < arrOfCategories.length; z++) {
         var currCat = arrOfCategories[z];
+        //document.write("currCat is " + currCat + "&nbsp" + "<br>");
         for (var i = 0; i < 13; i++) {
             time[i].fill(0);
         }
@@ -65,12 +67,16 @@ function initialize(d)
         for (i = 0; i < d.length; i++) {
             tmp = arr[i]['category'];
             if ('category' in arr[i]) {
+                //document.write("category is " + tmp + "&nbsp" + "<br>");
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == currCat) {
+                        //newsTime = arr[i]['dc:date'];
                         newsTime = arr[i]['date'];
                         date = newsTime.replace('T', '-').split("-", 3);
+                        //document.write("date is " + date + "&nbsp" + "<br>");
                         month = parseInt(date[1]);
                         day = parseInt(date[2]);
+                        //document.write("day is " + day + "&nbsp" + "<br>");
                         time[month][day]++;
                         yearTime[month]++;
                     }
@@ -79,6 +85,7 @@ function initialize(d)
         }
         //flag = 'byYear';
         tmp = initMaxYearAndMaxMonth(yearTime, 'byYear');
+        //document.write("tmp is " + tmp + "&nbsp" + "<br>");
         if (tmp > YAxisMaxValueYear) {
             YAxisMaxValueYear = tmp;
         }
@@ -91,9 +98,11 @@ function initialize(d)
     //document.write("set is: " + set.values() + "&nbsp" + "<br>");
     //document.write("YAxisMaxValueYear = " + YAxisMaxValueYear + "&nbsp" + "<br>" + "YAxisMaxValueMonth = " + YAxisMaxValueMonth + "&nbsp" + "<br>");
 }
+
 function initMaxYearAndMaxMonth(numbers, flag)
 {
     var max = 0;
+    //document.write("flag = " + flag + "&nbsp" + "<br>");
     if (flag == 'byYear') {
         for (var i = 0; i < numbers.length; i++) {
             //document.write("numbers: " + numbers + "&nbsp" + "<br>");
@@ -118,46 +127,27 @@ function initMaxYearAndMaxMonth(numbers, flag)
 function drawSmallMultiplesByCategory(viewBy)
 {
     d3.select("body").selectAll("svg").remove();
-
     for (i = 0; i < 6; i++)
     {
         execute(viewBy, arrOfCategories[i]);
     }
-    
-    //execute(viewBy, 'JRCNuclearSecurity');
-    //execute(viewBy, 'UNbodies');
-
-
-    //d3.json("NewsItemsData.json", createArr());
-    //set = new StringSet();
-    //set.add("foo");
-    //set.add("bar");
-
-    //alert(set.contains("foo")); // true
-    //alert(set.contains("baz")); // false
-
-    //set.values(); // ["foo", "bar"], though not necessarily in that order
-    //set.remove("foo");
-    //set.values(); // ["bar"]
 }
 
 
-
-
-
-
 function execute(viewBy, currCategory) {
-    
+    //document.write("ya tut" + "<br>");
     var view = viewBy;
     if (viewBy == '2016')
     {
         flag = 'byYear';
     }
-    else {
+    else
+    {
         flag = 'byMonth';
     }
     //var time;
-    d3.json("NewsItemsData.json", convert);
+    //d3.json("NewsItemsData1.json", convert);
+    d3.json("NewsItemsSmallData.json", convert);
     function convert(d) {
         var time = Create2DArray();
         var yearTime = new Array(13).fill(0); 
@@ -172,6 +162,7 @@ function execute(viewBy, currCategory) {
             if ('category' in arr[i]) {
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == category) {
+                        //newsTime = arr[i]['dc:date'];
                         newsTime = arr[i]['date'];
                         date = newsTime.replace('T', '-').split("-", 3);
                         month = parseInt(date[1]);
