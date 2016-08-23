@@ -21,6 +21,8 @@ var YAxisMaxValueMonth = 0;
 var flag = '';
 var set;
 var arrOfCategories;
+var arrCount;
+var arrOfInfoNews = [];
 
 //d3.json("NewsItemsData1.json", initialize);
 d3.json("NewsItemsSmallData.json", initialize);
@@ -43,49 +45,48 @@ function initialize(d)
         }
         else
         {
-            //document.write("ya tut" + "<br>");
-            //alert(set.contains("fignya kakaya-to"));
+             //alert(set.contains("fignya kakaya-to"));
         }
     }
     arrOfCategories = set.values();
-    //document.write(arrOfCategories + "<br>");
-
-
-
-    //arrOfCategories[0] = 'JRCNuclearSecurity';
-    //arrOfCategories[1] = 'UNbodies';
-    //document.write("category is " + arrOfCategories + "&nbsp" + "<br>");
-
+    arrCount = set.values();  /// здесь хорошо бы написать что-нибудь поумнее, но пока "работает и хорошо"
     //initialize year max and month max
-    for (z = 0; z < arrOfCategories.length; z++) {
+    for (z = 0; z < arrOfCategories.length; z++)
+    {
         var currCat = arrOfCategories[z];
-        //document.write("currCat is " + currCat + "&nbsp" + "<br>");
-        for (var i = 0; i < 13; i++) {
+        var infoNew = new infoNews(currCat);
+        for (var i = 0; i < 13; i++)
+        {
             time[i].fill(0);
         }
         yearTime.fill(0);
-        for (i = 0; i < d.length; i++) {
+        for (i = 0; i < d.length; i++)
+        {
             tmp = arr[i]['category'];
-            if ('category' in arr[i]) {
+            if ('category' in arr[i])
+            {
                 //document.write("category is " + tmp + "&nbsp" + "<br>");
                 for (j = 0; j < tmp.length; j++) {
                     if (tmp[j]['term'] == currCat) {
-                        //newsTime = arr[i]['dc:date'];
                         newsTime = arr[i]['date'];
                         date = newsTime.replace('T', '-').split("-", 3);
-                        //document.write("date is " + date + "&nbsp" + "<br>");
                         month = parseInt(date[1]);
                         day = parseInt(date[2]);
-                        //document.write("day is " + day + "&nbsp" + "<br>");
                         time[month][day]++;
                         yearTime[month]++;
                     }
                 }
             }
         }
+        totalInYear = SumOfArr(yearTime);
+        arrCount[z] = totalInYear;
+        infoNew.newsYearCount = totalInYear;
+        arrOfInfoNews[z] = infoNew;
+        //document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
+
+
         //flag = 'byYear';
         tmp = initMaxYearAndMaxMonth(yearTime, 'byYear');
-        //document.write("tmp is " + tmp + "&nbsp" + "<br>");
         if (tmp > YAxisMaxValueYear) {
             YAxisMaxValueYear = tmp;
         }
@@ -95,8 +96,10 @@ function initialize(d)
             YAxisMaxValueMonth = tmp;
         }
     }
-    //document.write("set is: " + set.values() + "&nbsp" + "<br>");
-    //document.write("YAxisMaxValueYear = " + YAxisMaxValueYear + "&nbsp" + "<br>" + "YAxisMaxValueMonth = " + YAxisMaxValueMonth + "&nbsp" + "<br>");
+    sortBy();
+    for (z = 0; z < arrOfInfoNews.length; z++) {
+        document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
+    }
 }
 
 function initMaxYearAndMaxMonth(numbers, flag)
@@ -132,7 +135,6 @@ function drawSmallMultiplesByCategory(viewBy)
         execute(viewBy, arrOfCategories[i]);
     }
 }
-
 
 function execute(viewBy, currCategory) {
     //document.write("ya tut" + "<br>");
@@ -192,8 +194,6 @@ function execute(viewBy, currCategory) {
             }
             return max;
         }
-
-        
 
         var height = 500,
         width = 500,
@@ -293,7 +293,6 @@ function execute(viewBy, currCategory) {
     }
 }
 
-
 function Create2DArray() {
     var arr = new Array(13);
     for (var i = 0; i < 13; i++) {
@@ -326,4 +325,36 @@ function StringSet() {
         }
         return values;
     };
+}
+
+function SumOfArr(array)
+{
+    var sum = 0;
+    for (var i = 0; i < array.length; i++)
+    {
+        sum += array[i];
+    }
+    return sum;
+}
+
+class infoNews{
+    constructor(name)
+    {
+        this.newsCategoryName = name;
+        this.newsYearCount = 0;
+    }
+}
+
+function sortBy()
+{
+    arrOfInfoNews.sort(function (a, b) {
+        if (a.newsYearCount > b.newsYearCount) {
+            return 1;
+        }
+        if (a.newsYearCount < b.newsYearCount) {
+            return -1;
+        }
+        // a must be equal to b
+        return 0;
+    });
 }
