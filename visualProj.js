@@ -21,10 +21,9 @@ var YAxisMaxValueMonth = 0;
 var flag = '';
 var set;
 var arrOfCategories;
-var arrCount;
+var arrCount = [];
 var arrOfInfoNews = [];
 
-//d3.json("NewsItemsData1.json", initialize);
 d3.json("NewsItemsSmallData.json", initialize);
 function initialize(d)
 {
@@ -49,7 +48,7 @@ function initialize(d)
         }
     }
     arrOfCategories = set.values();
-    arrCount = set.values();  /// здесь хорошо бы написать что-нибудь поумнее, но пока "работает и хорошо"
+    //arrCount = set.values();  /// здесь хорошо бы написать что-нибудь поумнее, но пока "работает и хорошо" /// вроде, теперь написала "поумнее"
     //initialize year max and month max
     for (z = 0; z < arrOfCategories.length; z++)
     {
@@ -97,9 +96,9 @@ function initialize(d)
         }
     }
     sortBy();
-    for (z = 0; z < arrOfInfoNews.length; z++) {
-        document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
-    }
+    //for (z = 0; z < arrOfCategories.length; z++) {
+    //    document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
+    //}
 }
 
 function initMaxYearAndMaxMonth(numbers, flag)
@@ -130,9 +129,14 @@ function initMaxYearAndMaxMonth(numbers, flag)
 function drawSmallMultiplesByCategory(viewBy)
 {
     d3.select("body").selectAll("svg").remove();
-    for (i = 0; i < 6; i++)
+    //for (i = 0; i < 6; i++)
+    //{
+    //    //execute(viewBy, arrOfCategories[i]);
+    //}
+    for (i = 1; i < 7; i++)
     {
-        execute(viewBy, arrOfCategories[i]);
+        var curr = arrOfInfoNews.length - i;
+        execute(viewBy, arrOfInfoNews[curr].newsCategoryName);
     }
 }
 
@@ -176,24 +180,32 @@ function execute(viewBy, currCategory) {
             }
         }
         
-        function getmax(view) {
-            var numbers = [];
-            if (flag == 'byYear')
-            {
-                numbers = yearTime;
-            }
-            else if (flag = 'byMonth')
-            {
-                numbers = time[view];
-            }
-            max = numbers[0];
-            for (var i = 0; i < numbers.length; i++) {
-                if (numbers[i] > max) {
-                    max = numbers[i];
-                }
-            }
-            return max;
-        }
+
+        //////////////////////////////
+        /// зачем мы это писали????
+        //////////////////////////////
+        //function getmax(view) {
+        //    var numbers = [];
+        //    if (flag == 'byYear')
+        //    {
+        //        numbers = yearTime;
+        //    }
+        //    else if (flag = 'byMonth')
+        //    {
+        //        numbers = time[view];
+        //    }
+        //    max = numbers[0];
+        //    for (var i = 0; i < numbers.length; i++) {
+        //        if (numbers[i] > max) {
+        //            max = numbers[i];
+        //        }
+        //    }
+        //    return max;
+        //}
+        //////////////////////////////
+        /// зачем мы это писали????
+        //////////////////////////////
+
 
         var height = 500,
         width = 500,
