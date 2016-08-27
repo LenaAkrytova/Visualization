@@ -1,0 +1,62 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+
+public class Main {
+	  public static void main(String args[]){
+		  PrintWriter writer = null;
+		try {
+		  writer = new PrintWriter("E:/CS/Vizualization/workspace/VizualizationData/src/ProducedData.txt", "UTF-8");
+	  
+		  int value = 1;
+		  Categories enumInstance = Categories.values()[value];
+		  //writer.println(enumInstance);
+		  
+		  writer.println("[");
+		  for(int i = 0; i< 10000; i++)
+		  {
+			String month = randomMonth();
+			String day = randomDay();
+			enumInstance = randomCategory();
+			if(!((month == "3") || (month == "4")))
+			{
+				writer.println("{" + "\n" +
+					    "\"date\": \"2016-" + month + "-" + day + "T00:00:00Z\"," + "\n" +
+					    "\"category\": { \"term\": \"" + enumInstance +"\" }" + "\n" +
+					    "},");
+			}
+			
+		  }
+		 writer.println("]");
+		  
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}  finally {
+			writer.close();
+		}
+	       
+	   }
+
+	private static String randomMonth() {
+		Random random = new Random();
+		int max = 8;
+		int min = 1;
+		return Integer.toString(random.nextInt(max - min + 1) + min);
+	}
+
+	private static Categories randomCategory() {
+		Random random = new Random();
+		int max = 188;
+		int min = 1;
+		return Categories.values()[random.nextInt(max - min + 1) + min];
+	}
+
+	private static String randomDay() {
+		Random random = new Random();
+		int max = 30;
+		int min = 1;
+		return Integer.toString(random.nextInt(max - min + 1) + min);
+		
+	}
+}

@@ -15,6 +15,10 @@ $('div.dropdown ul.dropdown-menu li a').click(function (e) {
 $(".dropdown-menu a").click(function () {
     $(this).closest(".dropdown-menu").prev().dropdown("toggle");
 });
+$('div.dropdown ul.dropdown-menu li').click(function (e) {
+    addToArrOfChosenCategories($(this).text());
+    //document.write($(this).text());
+})
 
 var YAxisMaxValueYear = 0;
 var YAxisMaxValueMonth = 0;
@@ -23,24 +27,38 @@ var set;
 var arrOfCategories;
 var arrCount = [];
 var arrOfInfoNews = [];
+var arrOfSuperCategories = [];
+var arrOfChosenCategories = [];
+var countOfDiagrams = 6;
 
+//d3.json("NewsItemsSmallData.json", initialize);
 d3.json("NewsItemsSmallData.json", initialize);
 function initialize(d)
 {
+   
     var time = Create2DArray();
     var yearTime = new Array(13).fill(0);
     var arr = d;
     var newsTime;
     var tmp, date, day, month;
     set = new StringSet();
-    
+    //document.write("set" + "<br>");
+
     //initialize array of categoriesNames TBD
     for (i = 0; i < arr.length; i++) {
         tmp = arr[i]['category'];
         if ('category' in arr[i]) {
-            for (j = 0; j < tmp.length; j++) {
-                set.add(tmp[j]['term']);
+            if (tmp.length)
+            {
+                for (j = 0; j < tmp.length; j++) {
+                    set.add(tmp[j]['term']);
+                }
             }
+            else
+            {
+                set.add(tmp['term']);
+            }
+            
         }
         else
         {
@@ -48,7 +66,10 @@ function initialize(d)
         }
     }
     arrOfCategories = set.values();
-    //arrCount = set.values();  /// здесь хорошо бы написать что-нибудь поумнее, но пока "работает и хорошо" /// вроде, теперь написала "поумнее"
+
+
+    arrOfSuperCategories = [];
+
     //initialize year max and month max
     for (z = 0; z < arrOfCategories.length; z++)
     {
@@ -65,8 +86,22 @@ function initialize(d)
             if ('category' in arr[i])
             {
                 //document.write("category is " + tmp + "&nbsp" + "<br>");
-                for (j = 0; j < tmp.length; j++) {
-                    if (tmp[j]['term'] == currCat) {
+                if (tmp.length)
+                {
+                    for (j = 0; j < tmp.length; j++) {
+                        if (tmp[j]['term'] == currCat) {
+                            newsTime = arr[i]['date'];
+                            date = newsTime.replace('T', '-').split("-", 3);
+                            month = parseInt(date[1]);
+                            day = parseInt(date[2]);
+                            time[month][day]++;
+                            yearTime[month]++;
+                        }
+                    }
+                }
+                else
+                {
+                    if (tmp['term'] == currCat) {
                         newsTime = arr[i]['date'];
                         date = newsTime.replace('T', '-').split("-", 3);
                         month = parseInt(date[1]);
@@ -75,6 +110,7 @@ function initialize(d)
                         yearTime[month]++;
                     }
                 }
+                
             }
         }
         totalInYear = SumOfArr(yearTime);
@@ -95,10 +131,12 @@ function initialize(d)
             YAxisMaxValueMonth = tmp;
         }
     }
-    sortBy();
     //for (z = 0; z < arrOfCategories.length; z++) {
-    //    document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
+    //    //document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
+    //    document.write(arrOfInfoNews[z].newsCategoryName + "(" + z + ")" + "," + "<br>");
     //}
+    sortBy("popularity");
+    
 }
 
 function initMaxYearAndMaxMonth(numbers, flag)
@@ -133,7 +171,7 @@ function drawSmallMultiplesByCategory(viewBy)
     //{
     //    //execute(viewBy, arrOfCategories[i]);
     //}
-    for (i = 1; i < 7; i++)
+    for (i = 1; i < countOfDiagrams+1; i++)
     {
         var curr = arrOfInfoNews.length - i;
         execute(viewBy, arrOfInfoNews[curr].newsCategoryName);
@@ -141,6 +179,7 @@ function drawSmallMultiplesByCategory(viewBy)
 }
 
 function execute(viewBy, currCategory) {
+
     //document.write("ya tut" + "<br>");
     var view = viewBy;
     if (viewBy == '2016')
@@ -151,8 +190,6 @@ function execute(viewBy, currCategory) {
     {
         flag = 'byMonth';
     }
-    //var time;
-    //d3.json("NewsItemsData1.json", convert);
     d3.json("NewsItemsSmallData.json", convert);
     function convert(d) {
         var time = Create2DArray();
@@ -166,9 +203,23 @@ function execute(viewBy, currCategory) {
         for (i = 0; i < d.length; i++) {
             tmp = arr[i]['category'];
             if ('category' in arr[i]) {
-                for (j = 0; j < tmp.length; j++) {
-                    if (tmp[j]['term'] == category) {
-                        //newsTime = arr[i]['dc:date'];
+                if (tmp.length)
+                {
+                    for (j = 0; j < tmp.length; j++) {
+                        if (tmp[j]['term'] == category) {
+                            //newsTime = arr[i]['dc:date'];
+                            newsTime = arr[i]['date'];
+                            date = newsTime.replace('T', '-').split("-", 3);
+                            month = parseInt(date[1]);
+                            day = parseInt(date[2]);
+                            time[month][day]++;
+                            yearTime[month]++;
+                        }
+                    }
+                }
+                else
+                {
+                    if (tmp['term'] == category) {
                         newsTime = arr[i]['date'];
                         date = newsTime.replace('T', '-').split("-", 3);
                         month = parseInt(date[1]);
@@ -180,33 +231,6 @@ function execute(viewBy, currCategory) {
             }
         }
         
-
-        //////////////////////////////
-        /// зачем мы это писали????
-        //////////////////////////////
-        //function getmax(view) {
-        //    var numbers = [];
-        //    if (flag == 'byYear')
-        //    {
-        //        numbers = yearTime;
-        //    }
-        //    else if (flag = 'byMonth')
-        //    {
-        //        numbers = time[view];
-        //    }
-        //    max = numbers[0];
-        //    for (var i = 0; i < numbers.length; i++) {
-        //        if (numbers[i] > max) {
-        //            max = numbers[i];
-        //        }
-        //    }
-        //    return max;
-        //}
-        //////////////////////////////
-        /// зачем мы это писали????
-        //////////////////////////////
-
-
         var height = 500,
         width = 500,
         margin = 30,
@@ -222,6 +246,11 @@ function execute(viewBy, currCategory) {
                 .attr("height", height)
             //// длина оси X= ширина контейнера svg - отступ слева и справа
                 .attr("align", "center");
+        svg.append("text")
+          .attr("x", width - 6)
+          .attr("y", height - 6)
+          .style("text-anchor", "end")
+          .text(category);
 
         var xAxisLength = width - 2 * margin;
         //// длина оси Y = высота контейнера svg - отступ сверху и снизу
@@ -357,16 +386,41 @@ class infoNews{
     }
 }
 
-function sortBy()
+function sortBy(byThe)
 {
-    arrOfInfoNews.sort(function (a, b) {
-        if (a.newsYearCount > b.newsYearCount) {
-            return 1;
-        }
-        if (a.newsYearCount < b.newsYearCount) {
-            return -1;
-        }
-        // a must be equal to b
-        return 0;
-    });
+    if (byThe == "popularity")
+    {
+        arrOfInfoNews.sort(function (a, b) {
+            if (a.newsYearCount > b.newsYearCount) {
+                return 1;
+            }
+            if (a.newsYearCount < b.newsYearCount) {
+                return -1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+    }
+    else if(byThe == "category")
+    {
+        arrOfInfoNews.sort(function (a, b) {
+            if (a.newsCategoryName > b.newsCategoryName) {
+                return 1;
+            }
+            if (a.newsCategoryName < b.newsCategoryName) {
+                return -1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+    }
+    
 }
+
+function addToArrOfChosenCategories(newCategory)
+{
+    arrOfChosenCategories.push(newCategory);
+    //document.write(arrOfChosenCategories);
+}
+
+
