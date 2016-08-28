@@ -131,12 +131,15 @@ function initialize(d)
             YAxisMaxValueMonth = tmp;
         }
     }
+    
+    sortBy("popularity");
+    ////eto chtoby raspechatat' v "tipa json" formate
+    //document.write("[" + "<br>");
     //for (z = 0; z < arrOfCategories.length; z++) {
     //    //document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
-    //    document.write(arrOfInfoNews[z].newsCategoryName + "(" + z + ")" + "," + "<br>");
+    //    document.write("{" + "<br>" + '"category": { "term": "' + arrOfInfoNews[z].newsCategoryName + '" },' + "<br>" + '"popularity": "' + arrOfInfoNews[z].newsYearCount + '"' + "<br>" + '},' + "<br>");
     //}
-    sortBy("popularity");
-    
+    //document.write("<br>" + "]");
 }
 
 function initMaxYearAndMaxMonth(numbers, flag)
