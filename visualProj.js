@@ -323,7 +323,7 @@ var YAxisMaxValueMonthForTopics = 0;
 
 
 
-d3.json("NewsItemsSmallData.json", initialize);
+d3.json("/NewsItemsSmallData.json", initialize);
 
 ///// создаем массивы (в т.ч. массив объектов),
 ///// определяем максимальный размер по оси У за месяц и за год,
@@ -689,7 +689,7 @@ function execute(viewBy, currCategory)
     }
 
     
-    d3.json("NewsItemsSmallData.json", convert); /// зачем мы это опять делаем так не очень понятно, но, наверное, лучше уже и не трогать
+    d3.json("/NewsItemsSmallData.json", convert); /// зачем мы это опять делаем так не очень понятно, но, наверное, лучше уже и не трогать
     function convert()
     {
         /// ну, ужас, конечно - все зачем-то по второму разу... но... раз он не будет на это смотреть...
