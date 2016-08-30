@@ -1,116 +1,12 @@
 ﻿
-//document.getElementById("month").addEventListener("click", function (viewBy) {
-//    //execute(viewBy);
-//});
-//document.getElementById("year").addEventListener("click", function (viewBy) {
-//    //execute(viewBy);
-//});
-//$('div.dropdown ul.dropdown-menu li a').click(function (e) {
-//    var $div = $(this).parent().parent().parent();
-//    var $btn = $div.find('button');
-//    drawSmallMultiplesByCategory($(this).text());
-//    return false;
-//});
-//$(".dropdown-menu a").click(function () {
-//    $(this).closest(".dropdown-menu").prev().dropdown("toggle");
-//});
-//$('div.dropdown ul.dropdown-menu li').click(function (e) {
-//    addToArrOfChosenCategories($(this).text());
-//    //document.write($(this).text());
-//})
-
 var popular = "";
 var byTopic = "";
 var options = [];
 var date = "All";
-var chosenFilter = "popular";
+var chosenFilter = "compareTopics";
 
 var countOfDiagrams = 9; /// сколько диаграмм показывать на странице (by defoult 9)
 //var chosenMonth = 0;
-
-
-//$('.popular-dropdown li a').click(function (e) {
-//    chosenFilter = "popular";
-//    popular = $(this).text();
-//    console.log("popular pressed and chosen option is: " + $(this).text());
-//    return false;
-//});
-//$('.by-topic-dropdown li a').click(function (e) {
-//    chosenFilter = "popularByTopic";
-//    byTopic = $(this).text();
-//    console.log("popular by topic pressed and chosen option is: " + $(this).text());
-//    return false;
-//});
-//$('.compare-button').click(function (e) {
-//    chosenFilter = "compareTopics";
-//    console.log("compare topics pressed and buttons text is: " + $(this).text());
-//    return false;
-//});
-//$('.check-dropdown a').on('click', function (event) {
-//    var $target = $(event.currentTarget),
-//        val = $target.attr('data-value'),
-//        $inp = $target.find('input'),
-//        idx;
-//    if ((idx = options.indexOf(val)) > -1) {
-//        options.splice(idx, 1);
-//        setTimeout(function () { $inp.prop('checked', false) }, 0);
-//    } else {
-//        options.push(val);
-//        setTimeout(function () { $inp.prop('checked', true) }, 0);
-//    }
-//    $(event.target).blur();
-//    chosenFilter = "customCategories";
-//    console.log("custom categories pressed and chosen options are: " + options);
-//    return false;
-//});
-//$('.date-dropdown li a').click(function (e) {
-//    date = $(this).text();
-//    console.log("date pressed and chosen option is: " + $(this).text());
-//    return false;
-//});
-//$('.go-button').click(function (e) {
-//    console.log("go button pressed, drawing the visualization of chosen filter: " + chosenFilter);
-//    ////////////////////
-//    // это пока временный вариант, чтобы посмотреть, что оно работает
-//    drawSmallMultiplesByCategory('2016');
-//    //////////////////////
-//    return false;
-//});
-//$(".toggle-close a").click(function () {
-//    $(this).closest(".dropdown-menu").prev().dropdown("toggle");
-//});
-
-//var dropdownsData = {
-//    popularList: ['1 most popular', '2 most popular', '3 most popular', '4 most popular', '5 most popular', '6 most popular', '7 most popular', '8 most popular', '9 most popular', '10 most popular', '11 most popular', '12 most popular'],
-//    popularByTopicList: ['Culture', 'Education', 'Environment', 'Health', 'Economics', 'Politics', 'Security', 'Sport', 'Transport'],
-//    customCategoriesList: ['300BillionEuroPackage', 'GMO', 'GunterOettinger', 'Eurostat', 'Demography', 'Sport', 'EuropeanCinema', 'JonathanHill', 'SchengenArea', 'InformationSociety', 'EBRD', 'TransuranicElements', 'MargretheVestager', 'RailTransport', 'MarosSefcovic', 'Competition-StateAid', 'AgricultureRuralDevelopment', 'Roaming', 'EuropeanNeighbourhoodPolicy', 'RatingsAgencies', 'HumanitarianAid', 'EPElection', 'eHealth', 'VytenisAndriukaitis', 'PublicProcurement', 'IntellectualProperty', 'ReferenceMaterials', 'Employment', 'PAC', 'PoliticalUnrest', 'Audit', 'EuropeanCulturalCapitals', 'EnvironmentalProtection', 'GenderEquality', 'EIB', 'SingleEuropeanSky', 'ScientificStrategy', 'KristalinaGeorgieva', 'CustomsUnion', 'TTIP', 'EuropeAid', 'RuralDevelopment', 'EADS', 'TechnologyForesight', 'VAT', 'Youth', 'ENLARGEMENT', 'Erasmus', 'ESA', 'ClimateAction', 'PetroleumRefineries', 'ForgeryMoney', 'MaritimeTransport', 'EducationFilter', 'JohannesHahn', 'Ecology', 'Development', 'EnergyMarketsandStrategies', 'BudgetoftheEU', 'EFSA', 'EPPoliticalGroups', 'EuropeanGreenCapitalAward', 'UGTMS', 'InformationSecurity', 'Lobbyism', 'NatashaBertaud', 'AnimalHealth', 'SocialSituation', 'OSH', 'TobaccoSmuggling', 'Accounting', 'PRESS', 'Drugs', 'Flooding', 'OHIM', 'RacismXenophobia', 'SmallMediumSizeBusinesses', 'MEP', 'MinaAndreeva', 'Counterfeiting', 'FundamentalRights', 'MobilityOfWorkers', 'JRCintheMedia', 'RareEarth', 'TEN-T-News', 'Protectionism', 'Culture', 'Competition-Antitrust', 'WorldEconomy', 'TradeOrganisations', 'ICRC', 'EUInternet', 'Eurozone', 'FoodSafety', 'Globalisation', 'GreenVehicles', 'FoodSecurityFoodAid', 'Innovation', 'PeaceProcess', 'ChildrensRights', 'G8', 'PrivateEquity', 'CrisisResponse', 'Guantanamo', 'MargaritisSchinas', 'G7', 'MilleniumGoals', 'NuclearSafety', 'CivilProtection', 'MARS-STAT', 'DutchPresidencyEU', 'DominantPosition', 'Eurocontrol', 'Discrimination', 'EMF_Health', 'ETF', 'MartinSchulz', 'EU-Canada', 'DigitalContent', 'FransTimmermans', 'Tourism', 'CouncilPresident', 'HumanTraffic', 'G20', 'Telecommunications', 'RegionalPolicy', 'PierreMoscovici', 'MaritimeSafetyEurope', 'FinancialEconomicCrime', 'ECB', 'CybersecurityAntifraud', 'BorderControl', 'Competition', 'FedericaMogherini', 'DimitrisAvramopoulos', 'EuropeanCouncil', 'MaritimeSafetyWorld', 'WorldBank', 'Europol', 'Competition-Mergers', 'PeaceKeeping', 'EU-Japan', 'ClimateChange', 'RenewableEnergies', 'CommunicableDiseases', 'NuclearMedecine', 'mahb', 'Dumping', 'Agriculture', 'FinancialServices', 'Euro', 'Biotechnology', 'PublicHealth', 'NaturalDisasters', 'Society', 'AirTransport', 'EU-Pacific', 'EU-Caribbean', 'NuclearEnergy', 'Jean-ClaudeJuncker', 'ImportsExports', 'EuropeanParliament', 'Environment', 'FightagainstFraud', 'AlternativeEnergy', 'FrontexAgency', 'NuclearDecommissioning', 'EU-China', 'Asylum', 'ManMadeDisasters', 'EU-Africa', 'UNSecretaryGeneral', 'EU-LatinAmerica', 'ECnews', 'Terrorism', 'TaxHaven', 'EU-Asia', 'EU-USA', 'SecurityCouncil', 'TAXUD', 'Nuclear', 'Immigration', 'FRA-EU', 'JRCSafeguards', 'JRCNuclearSecurity', 'UNbodies', 'Security', 'Conflict', 'TerroristAttack'],
-//    datesList: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August']
-//};
-//fillUL(dropdownsData.popularList, document.getElementById("popular"));
-//fillUL(dropdownsData.popularByTopicList, document.getElementById("popularByTopic"));
-//fillUL(dropdownsData.datesList, document.getElementById("date"));
-//fillUL(dropdownsData.customCategoriesList, document.getElementById("custom"));
-//function fillUL(array, list) {
-//    for (var i = 0; i < array.length; i++) {
-//        // Create the list item:
-//        var liItem = document.createElement('li');
-//        var aItem = document.createElement('a');
-//        // Set its contents:
-//        if (list.id == 'custom') {
-//            aItem.setAttribute('data-value', array[i]);
-//            aItem.setAttribute('tabIndex', '-1');
-//            var inputItem = document.createElement('input'); 
-//            inputItem.type = "checkbox";
-//            aItem.appendChild(inputItem);
-//        }
-//        aItem.appendChild(document.createTextNode(" " + array[i]));
-//        liItem.appendChild(aItem);
-//        // Add it to the list:
-//        list.appendChild(liItem);
-//    }
-//    console.log("filled " + list.id + " dropdown");
-//    return list;
-//}
 
 var dropdownsData = {
     popularList: ['1 most popular', '2 most popular', '3 most popular', '4 most popular', '5 most popular', '6 most popular', '7 most popular', '8 most popular', '9 most popular', '10 most popular', '11 most popular', '12 most popular'],
@@ -167,6 +63,7 @@ $('.compare-button').click(function (e) {
     document.getElementById('label').innerHTML = "Compare topics filter is chosen";
     document.getElementById('label-gen').innerHTML = ", press GO button to visualize";
     chosenFilter = "compareTopics";
+    drawAllTopics(date);
     console.log("compare topics pressed and buttons text is: " + $(this).text());
     return false;
 });
@@ -635,19 +532,19 @@ function initialize(d)
 
     /// сортируем по популярности для дефолтного фильтра
     sortBy("popularity");
+    //sortBy("category");
 
     ////eto chtoby raspechatat' v "tipa json" formate
     //document.write("[" + "<br>");
     //for (z = 0; z < arrOfCategories.length; z++) {
-    //    //document.write("infoNew is " + "&nbsp" + arrOfInfoNews[z].newsCategoryName + "&nbsp" + arrOfInfoNews[z].newsYearCount + "<br>");
-    //    document.write("{" + "<br>" + '"category": { "term": "' + arrOfInfoNews[z].newsCategoryName + '" },' + "<br>" + '"popularity": "' + arrOfInfoNews[z].newsYearCount + '"' + "<br>" + '},' + "<br>");
+    //    //document.write(arrOfInfoNews[z].newsCategoryName + "<br>");
+    //    //document.write("{" + "<br>" + '"category": { "term": "' + arrOfInfoNews[z].newsCategoryName + '" },' + "<br>" + '"popularity": "' + arrOfInfoNews[z].newsYearCount + '"' + "<br>" + '},' + "<br>");
     //}
     //document.write("<br>" + "]");
      /// создаем массив глобальных категорий с подкатегориями (двумерный)
     createArrOfTopics();
+    drawAllTopics("All");
     
-    //////test
-    //
 }
 
 /// для того, чтобы нарисовать ОДИН график нужно вызвать эту функцию
