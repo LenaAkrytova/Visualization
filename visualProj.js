@@ -52,8 +52,8 @@ $('.popular-dropdown li a').click(function (e) {
 $('.by-topic-dropdown li a').click(function (e) {
     document.getElementById('label').innerHTML = "Show most popular for " + $(this).text() + " topic is chosen";
     document.getElementById('label-gen').innerHTML = ", press GO button to visualize";
-
     chosenFilter = "popularByTopic";
+    countOfDiagrams = 9;
     byTopic = $(this).text();
     console.log("popular by topic pressed and chosen option is: " + $(this).text());
     return false;
@@ -211,10 +211,8 @@ var YAxisMaxValueMonthForTopics = 0;
 // в некоторых "суперкатегориях" кол-во категорий меньше 9 - проверить как оно будет работать
 // тут есть баг - почему-то двумерный массив allTopics размером 13, а не 9... хорошо бы поправить, но пока просто нужно иметь в виду, что считать нужно не до allTopics.length, а до 9
 // можно еще поменять customCategoriesList - у нас же есть этот массив
-// может распределить более равномерно по топикам???
 // выбираемые категории отсортированы по популярности в обратном порядке
 // если выбрали "by topic",а потом хотим изменить кол-во, то нифига не получится )))
-// compare topics выглядит так, будто ничего не делает... может она должна работать как "go"?
 // кнопки "data" и т.п. должны менять значение 
 
 
@@ -689,7 +687,7 @@ function execute(viewBy, currCategory)
         var scaleNum = 32;
 
         if (flag == 'byYear') {
-            scaleNum = 13;
+            scaleNum = 12;
         }
 
         var scaleX = d3.scale.linear()
@@ -918,7 +916,7 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
     var scaleNum = 32;
 
     if (flag == 'byYear') {
-        scaleNum = 13;
+        scaleNum = 12;
     }
 
     var scaleX = d3.scale.linear()
