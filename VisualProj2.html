@@ -27,30 +27,10 @@
             font: 10px Verdana;
         }
     </style>
-	 <link rel="stylesheet" href="main.css">
 </head>
 <body>
-  <!--  <div class="container">  -->
-	<div class="page-header center">
-		<h1><strong>News Visualization with small multiples</strong> <br><small>by Elena Akrytova, Ilana Veitzblit and Katerina Portman</small></h1>
-		<span class="lb-lg hint" id="label">Show visualization filtered by popularity</span>
-		<span class="lb-lg hint" id="label-date">, for all months</span>
-		<span class="lb-lg hint" id="label-gen"></span>
-   </div>	
-   <nav class="navbar navbar-inverse">
-   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-	  <a class="navbar-brand" href="#">Choose filter and date</a>
-    </div>
-	  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	  
+    <div class="container">
+	
 		<!-- Split button -->
 		<div class="btn-group">
 		  <button type="button" class="btn btn-lg btn-primary">Popular</button>
@@ -59,19 +39,21 @@
 			<span class="sr-only">Toggle Dropdown</span>
 		  </button>
 		  <ul class="dropdown-menu popular-dropdown toggle-close" id="popular">
+
 		  </ul>
 		</div>
 		<div class="btn-group">
-		  <button type="button" class="btn btn-lg btn-primary">Popular by topic</button>
-		  <button type="button" class="btn btn-lg btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		  <button type="button" class="btn btn-lg btn-success">Popular by topic</button>
+		  <button type="button" class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<span class="caret"></span>
 			<span class="sr-only">Toggle Dropdown</span>
 		  </button>
 		  <ul class="dropdown-menu by-topic-dropdown toggle-close" id="popularByTopic">
+		  
 		  </ul>
 		</div>
 		<div class="btn-group">
-		  <button type="button" class="btn btn-lg btn-primary compare-button">Compare topics</button>
+		  <button type="button" class="btn btn-lg btn-info compare-button">Compare topics</button>
 		</div>
 		<div class="btn-group">
 		  <button type="button" class="btn btn-lg btn-primary">Custom categories</button>
@@ -79,10 +61,11 @@
 			<span class="caret"></span>
 			<span class="sr-only">Toggle Dropdown</span>
 		  </button>
-		  <ul class="dropdown-menu check-dropdown scrollable-menu" id="custom" role="menu">
+		  <ul class="dropdown-menu check-dropdown" id="custom">
+
 		  </ul>
 		</div>
-		<div class="btn-group date-move">
+		<div class="btn-group">
 		  <button type="button" class="btn btn-lg btn-warning">Date</button>
 		  <button type="button" class="btn btn-lg btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<span class="caret"></span>
@@ -93,15 +76,46 @@
 			<li role="separator" class="divider"></li>
 		  </ul>
 		</div>
-		<div class="btn-group pull-right">
+		<div class="btn-group">
 		  <button type="button" class="btn btn-lg btn-danger go-button">Go</button>
 		</div>
 		
-		</div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-		
-   <!--  </div>  -->
+        <!--<h2>Button Tags</h2>-->
+        <!--<button type="button" id ="day" class="btn btn-info" onclick="viewByDay('day')">Day</button>-->
+ <!--        <div class="dropdown">
+            <button id="month" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                Month
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">6</a></li>
+                <li><a href="#">7</a></li>
+                <li><a href="#">8</a></li>
+                <li><a href="#">9</a></li>
+                <li><a href="#">10</a></li>
+                <li><a href="#">11</a></li>
+                <li><a href="#">12</a></li>
+            </ul>
+        </div>
+        <div class="dropdown">
+            <button id="year" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                Year
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">2016</a></li>
+               </ul>
+        </div> -->
+            <!--<button type="button" id ="month" class="btn btn-info" onclick="viewByMonth('month')" checked>Month</button>
+            <button type="button" id ="year" class="btn btn-info" onclick="viewByYear('year')">Year</button>-->
+
+    
+    </div>
 
     <script type="text/javascript"></script>
     <script src="visualProj.js"></script>
