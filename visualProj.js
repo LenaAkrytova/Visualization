@@ -253,27 +253,20 @@ $('.go-button').click(function (e) {
         if (popular == ' 12 most popular') {
             countOfDiagrams = 12;
         }
-        if(date == "All")
-        {
-            drawSmallMultiplesByCategory(date);
-        }
-        else
-        {
-            drawSmallMultiplesByCategory(date);
-        }
+        drawSmallMultiplesByCategory(date);
     }
     if (chosenFilter == "compareTopics")
     {
-        if (date == "All")
-        {
-            drawAllTopics(date);
-        }
-        else
-        {
-            drawAllTopics(date);// это еще не дописано
-        }
+        drawAllTopics(date);
     }
-    ///drawSmallMultiplesByCategory('2016');
+    if (chosenFilter == "customCategories")
+    {
+        drawSmallMultiplesByChosenCategory(date);
+    }
+    if (chosenFilter == "popularByTopic")
+    {
+        drawSmallMultiplesForMostPopularyCategoriesInChosenTopic(date, byTopic);
+    }
     return false;
 });
 
@@ -318,17 +311,14 @@ var flagForTopics = ''; /// показать 9 глобальных катего
 var YAxisMaxValueYearForTopics = 0;
 var YAxisMaxValueMonthForTopics = 0; 
 
-// проверять чтобы countOfDiagrams был не больше 12 когда пользователь выбирает категории вручную
-// создать вручную массив суперкатегорий
-// поменяеть стринги из названий на кнопочках
 // в некоторых "суперкатегориях" кол-во категорий меньше 9 - проверить как оно будет работать
 // тут есть баг - почему-то двумерный массив allTopics размером 13, а не 9... хорошо бы поправить, но пока просто нужно иметь в виду, что считать нужно не до allTopics.length, а до 9
-//
-// если нужно нарисовать графики категорий из ОДНОЙ глобальной категории, то вызываем обычную ф-цию execute для нескольких нужных подкатегорий
-// если нужно нарисовать 9 графиков глобальных категорий, то нужно вызывать отдельную функцию deawAllForTopics
 // можно еще поменять customCategoriesList - у нас же есть этот массив
-// разобраться с флагом (который год или месяц)
-// распределить более равномерно по топикам
+// может распределить более равномерно по топикам???
+// выбираемые категории отсортированы по популярности в обратном порядке
+// если выбрали "by topic",а потом хотим изменить кол-во, то нифига не получится )))
+// compare topics выглядит так, будто ничего не делает... может она должна работать как "go"?
+
 
 
 
@@ -697,9 +687,7 @@ function execute(viewBy, currCategory)
         }
     }
 
-
-
-
+    
     d3.json("NewsItemsSmallData.json", convert); /// зачем мы это опять делаем так не очень понятно, но, наверное, лучше уже и не трогать
     function convert()
     {
@@ -1159,6 +1147,60 @@ function drawSmallMultiplesByCategory(viewBy)
     {
         var curr = arrOfInfoNews.length - i;
         execute(viewBy, arrOfInfoNews[curr].newsCategoryName);
+    }
+}
+
+function drawSmallMultiplesByChosenCategory(viewBy) 
+{
+    d3.select("body").selectAll("svg").remove();
+    for (i = 0; i < options.length; i++)
+    {
+        execute(viewBy, options[i]);
+    }
+}
+
+function drawSmallMultiplesForMostPopularyCategoriesInChosenTopic(viewBy, chosenTopic) {
+    d3.select("body").selectAll("svg").remove();
+    if (chosenTopic == " Culture")
+    {
+        topic = culture;
+    }
+    if (chosenTopic == " Economics")
+    {
+        topic = economics;
+    }
+    if (chosenTopic == " Education")
+    {
+        topic = education;
+    }
+    if (chosenTopic == " Environment")
+    {
+        topic = environment;
+    }
+    if (chosenTopic == " Health")
+    {
+        topic = health;
+    }
+    if (chosenTopic == " Politics")
+    {
+        topic = politics;
+    }
+    if (chosenTopic == " Security")
+    {
+        topic = security;
+    }
+    if (chosenTopic == " Sport")
+    {
+        topic = sport;
+    }
+    if (chosenTopic == " Transportation")
+    {
+        topic = transportation;
+    }
+    for (i = 1; i < countOfDiagrams+1; i++)
+    {
+        var curr = topic.length - i;
+        execute(viewBy, topic[curr].newsCategoryName);
     }
 }
 
