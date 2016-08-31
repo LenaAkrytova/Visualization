@@ -255,7 +255,6 @@ $('.by-topic-dropdown li a').click(function (e) {
 
 $('.compare-button').click(function (e) {
     document.getElementById('label').innerHTML = "Compare topics filter is chosen";
-    document.getElementById('label-gen').innerHTML = ", press GO button to visualize";
     chosenFilter = "compareTopics";
     drawAllTopics(date);
     console.log("compare topics pressed and buttons text is: " + $(this).text());
