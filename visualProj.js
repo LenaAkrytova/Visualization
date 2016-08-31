@@ -365,8 +365,6 @@ $(".toggle-close a").click(function () {
     $(this).closest(".dropdown-menu").prev().dropdown("toggle");
 });
 
-
-
 var set; /// это чтобы джейсона туда сохранить (временно)
 var arrOfCategories; /// массив всех уникальных категорий
 var arrCount = []; /// массив популярости соответствующей категории из arrOfCategories
@@ -400,10 +398,6 @@ var YAxisMaxValueMonthForTopics = 0;
 var flag = ''; /// показать весь год или по месяцам
 var flagForTopics = ''; /// показать 9 глобальных категорий, или 9 самых популярных из одной категории, но, может, он и не  нужен...
 
-
-
-//////////////////////////////////////////////////////////////////////////
-////   TBD    
 
 d3.json("data/NewsItemsSmallData.js", initialize);
 
@@ -835,8 +829,8 @@ function execute(viewBy, currCategory)
 
 
         /// это та самая часть, которая рисует... подробнее вникать в нее не буду - там и так уже с комментами)))))
-        var height = 400,
-        width = 400,
+        var height = 350,
+        width = 350,
         margin = 40,
         YAxisMaxValue = (flag == 'byYear') ? YAxisMaxValueYear : YAxisMaxValueMonth;
         YAxisMaxValue += 10;
@@ -1067,8 +1061,8 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
     
        
    /// теперь рисуем - на всякий случай, пока просто повторю код, а не буду выносить в отдельную функцию
-    var height = 400,
-    width = 400,
+    var height = 350,
+    width = 350,
     margin = 40,
     YAxisMaxValue = (flag == 'byYear') ? YAxisMaxValueYearForTopics : YAxisMaxValueMonthForTopics;
     YAxisMaxValue += 10;
