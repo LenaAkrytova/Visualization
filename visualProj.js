@@ -874,7 +874,7 @@ function execute(viewBy, currCategory)
             .attr("dy", ".75em")
             .style("float", "center")
             .style("font-size", "15px")
-            //.style("text-decoration", "underline")
+            .style("font-weight", "bold")
             .text(currCategory);
 
 
@@ -1106,7 +1106,7 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
         .attr("dy", ".75em")
         .style("float", "center")
         .style("font-size", "15px")
-        //.style("text-decoration", "underline")
+        .style("font-weight", "bold")
         .text(nameOfTopic);
 
 
