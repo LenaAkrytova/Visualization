@@ -177,7 +177,12 @@ var set; /// это чтобы джейсона туда сохранить (в�
 var arrOfCategories; /// массив всех уникальных категорий
 var arrCount = []; /// массив популярости соответствующей категории из arrOfCategories
 var arrOfSuperCategories = []; /// массив глобальных категорий (не уникальных), вписаных вручную, соответствуют arrOfCategories
-var arrOfInfoNews = []; /// массив объектов. Каждый объект - это название категории, ее популярность и ее глобальная категория
+
+var arrOfPickInYear = [];
+var arrOfPickInMonth = [];
+
+
+var arrOfInfoNews = []; /// массив объектов. Каждый объект - это название категории, ее популярность и ее глобальная категория + максимальное значение в год и за месяц в течение года
 var arrOfChosenCategories = []; /// массив категорий, выбранных пользователем
 
 /// массивы подкатегорий соответствующих (названию) глобальных категорий
@@ -197,16 +202,16 @@ var arr; /// сюда складываем джейсона
 
 var YAxisMaxValueYear = 0;   /// максимальное значение на оси У
 var YAxisMaxValueMonth = 0; ///  максимальное значение на оси X
+var YAxisMaxValueYearForTopics = 0;
+var YAxisMaxValueMonthForTopics = 0;
 var flag = ''; /// показать весь год или по месяцам
-
 var flagForTopics = ''; /// показать 9 глобальных категорий, или 9 самых популярных из одной категории, но, может, он и не  нужен...
 
 
 
 //////////////////////////////////////////////////////////////////////////
 ////   TBD    
-var YAxisMaxValueYearForTopics = 0;
-var YAxisMaxValueMonthForTopics = 0; 
+
 
 // в некоторых "суперкатегориях" кол-во категорий меньше 9 - проверить как оно будет работать
 // тут есть баг - почему-то двумерный массив allTopics размером 13, а не 9... хорошо бы поправить, но пока просто нужно иметь в виду, что считать нужно не до allTopics.length, а до 9
@@ -506,40 +511,52 @@ function initialize(d)
 
         /// заполняем поле topic соответствующего объекта в массиве arrOfInfoNews
         infoNew.topic = arrOfSuperCategories[z];
+                 
+        /// initialize year max and month max
+        //tmp = initMaxYearAndMaxMonth(yearTime, 'byYear');
+        //if (tmp > YAxisMaxValueYear) {
+        //    YAxisMaxValueYear = tmp;
+        //}
+        //        tmp = initMaxYearAndMaxMonth(time, 'byMonth');
+        //if (tmp > YAxisMaxValueMonth) {
+        //    YAxisMaxValueMonth = tmp;
+        //}
+        arrOfPickInYear[z] = initMaxYearAndMaxMonth(yearTime, 'byYear');
+        //if (arrOfPickInYear[z] > YAxisMaxValueYear)
+        //{
+        //    YAxisMaxValueYear = arrOfPickInYear[z];
+        //}
+        arrOfPickInMonth[z] = initMaxYearAndMaxMonth(time, 'byMonth');
+        //if (arrOfPickInMonth[z] > YAxisMaxValueMonth)
+        //{
+        //    YAxisMaxValueMonth = arrOfPickInMonth[z]
+        //}
+
+        /// заполняем поле PickInYear соответствующего объекта в массиве arrOfInfoNews
+        infoNew.PickInYear = arrOfPickInYear[z];
+
+        /// заполняем поле PickInMonth соответствующего объекта в массиве arrOfInfoNews
+        infoNew.PickInMonth = arrOfPickInMonth[z];
 
         /// заполняем поле newsYearCount соответствующего объекта в массиве arrOfInfoNews
         arrOfInfoNews[z] = infoNew;
-        //document.write(infoNew.newsCategoryName + "&nbsp" + infoNew .newsYearCount + "&nbsp" + infoNew.topic + "<br>");
-        
-        /// initialize year max and month max
-        tmp = initMaxYearAndMaxMonth(yearTime, 'byYear');
-        if (tmp > YAxisMaxValueYear) {
-            YAxisMaxValueYear = tmp;
-        }
-
-        tmp = initMaxYearAndMaxMonth(time, 'byMonth');
-        if (tmp > YAxisMaxValueMonth) {
-            YAxisMaxValueMonth = tmp;
-        }
     }
-
-    /// это просто распечатка массива, если нужно
-    //for (z = 0; z < arrOfCategories.length; z++) {
-    //    document.write(arrOfInfoNews[z].newsCategoryName + "<br>");
-    //}
 
     /// сортируем по популярности для дефолтного фильтра
     sortBy("popularity");
     //sortBy("category");
-
-    ////eto chtoby raspechatat' v "tipa json" formate
+    //eto chtoby raspechatat' v "tipa json" formate
     //document.write("[" + "<br>");
     //for (z = 0; z < arrOfCategories.length; z++) {
     //    //document.write(arrOfInfoNews[z].newsCategoryName + "<br>");
     //    //document.write("{" + "<br>" + '"category": { "term": "' + arrOfInfoNews[z].newsCategoryName + '" },' + "<br>" + '"popularity": "' + arrOfInfoNews[z].newsYearCount + '"' + "<br>" + '},' + "<br>");
     //}
     //document.write("<br>" + "]");
-     /// создаем массив глобальных категорий с подкатегориями (двумерный)
+    // это просто распечатка массива, если нужно
+    //for (z = 0; z < arrOfCategories.length; z++) {
+    //    document.write(arrOfInfoNews[z].newsCategoryName + "<br>");
+    //}
+    /// создаем массив глобальных категорий с подкатегориями (двумерный)
     createArrOfTopics();
     drawAllTopics("All");
     
@@ -548,8 +565,6 @@ function initialize(d)
 /// для того, чтобы нарисовать ОДИН график нужно вызвать эту функцию
 function execute(viewBy, currCategory)
 {
-    //var view = viewBy;
-    //document.write("viewBy = " + viewBy + "<br>");
     if (viewBy == 'All')
     {
         flag = 'byYear';
@@ -560,25 +575,25 @@ function execute(viewBy, currCategory)
         if (viewBy == ' January') {
             view = 1;
         }
-        if (date == ' February') {
+        else if (date == ' February') {
             view = 2;
         }
-        if (date == ' March') {
+        else if (date == ' March') {
             view = 3;
         }
-        if (date == ' April') {
+        else if (date == ' April') {
             view = 4;
         }
-        if (date == ' May') {
+        else if (date == ' May') {
             view = 5;
         }
-        if (date == ' June') {
+        else if (date == ' June') {
             view = 6;
         }
-        if (date == ' July') {
+        else if (date == ' July') {
             view = 7;
         }
-        if (date == ' August') {
+        else if (date == ' August') {
             view = 8;
         }
     }
@@ -624,6 +639,7 @@ function execute(viewBy, currCategory)
                 }
             }
         }
+
 
         /// это та самая часть, которая рисует... подробнее вникать в нее не буду - там и так уже с комментами)))))
         var height = 400,
@@ -763,6 +779,9 @@ function execute(viewBy, currCategory)
 function drawAllTopics(viewBy)
 {
     d3.select("body").selectAll("svg").remove();
+    /// так, конечно, делать нельзя...но...
+    YAxisMaxValueYearForTopics = 16000;
+    YAxisMaxValueMonthForTopics = 2200;
     drawOneTopicInOneGraph(culture, "Culture", viewBy);
     drawOneTopicInOneGraph(economics, "Economics", viewBy);
     drawOneTopicInOneGraph(education, "Education", viewBy);
@@ -854,17 +873,7 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
         }
     }
     
-    tmp = initMaxYearAndMaxMonth(yearTime, 'byYear');
-    if (tmp > YAxisMaxValueYearForTopics) {
-        YAxisMaxValueYearForTopics = tmp;
-    }
-
-    tmp = initMaxYearAndMaxMonth(time, 'byMonth');
-    if (tmp > YAxisMaxValueMonthForTopics) {
-        YAxisMaxValueMonthForTopics = tmp;
-    }
-
-   
+       
    /// теперь рисуем - на всякий случай, пока просто повторю код, а не буду выносить в отдельную функцию
     var height = 400,
     width = 400,
@@ -991,19 +1000,23 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
 function initMaxYearAndMaxMonth(numbers, flag)
 {
     var max = 0;
-   if (flag == 'byYear') {
-        for (var i = 0; i < numbers.length; i++) {
-            //document.write("numbers: " + numbers + "&nbsp" + "<br>");
-            if (numbers[i] > max) {
+    if (flag == 'byYear')
+    {
+        for (var i = 0; i < numbers.length; i++)
+        {
+            if (numbers[i] > max)
+            {
                 max = numbers[i];
             }
-            //document.write("i = " + i + "&nbsp" + "max[i] = " + max + "&nbsp" + "<br>");
         }
     }
    else if (flag = 'byMonth') {
-        for(var i = 0; i < numbers.length; i++) {
-            for (var j = 0; j < numbers[i].length; j++) {
-                if (numbers[i][j] > max) {
+       for (var i = 0; i < numbers.length; i++)
+       {
+           for (var j = 0; j < numbers[i].length; j++)
+           {
+               if (numbers[i][j] > max)
+               {
                     max = numbers[i][j];
                 }
             }
@@ -1012,36 +1025,53 @@ function initMaxYearAndMaxMonth(numbers, flag)
    return max;
 }
 
-//function MaxYearForOneTopic(numbers)
-//{
-//    var max = 0;
-//    for (var i = 0; i < numbers.length; i++) {
-//        if (numbers[i] > max)
-//        {
-//            max = numbers[i];
-//        }
-//    }
-//    return max;
-//}
-//function MaxMonthForOneTopic(numbers) {
-//    var max = 0;
-//    for (var i = 0; i < numbers.length; i++) {
-//        for (var j = 0; j < numbers[i].length; j++) {
-//            if (numbers[i][j] > max) {
-//                max = numbers[i][j];
-//            }
-//        }
-//    }
-//    return max;
-//}
+function MaxYearForOneTopic(array)
+{
+    var max = 0;
+    for (var i = 0; i < array.length; i++)
+    {
+        if (array[i].PickInYear > max)
+        {
+            max = array[i].PickInYear;
+        }
+    }
+    return max;
+}
+function MaxMonthForOneTopic(array) 
+{
+    var max = 0;
+    for (var i = 0; i < array.length; i++) 
+    {
+        if (array[i].PickInMonth > max)
+        {
+            max = array[i].PickInMonth;
+        }
+    }
+    return max;
+}
 
 function drawSmallMultiplesByCategory(viewBy)
 {
     d3.select("body").selectAll("svg").remove();
+    YAxisMaxValueYear = 0;
+    YAxisMaxValueMonth = 0;
     /// т.к. категории отсортированы по возрастанию, нужно взять ПОСЛЕДНИЕ
     for (i = 1; i < countOfDiagrams+1; i++)
     {
         var curr = arrOfInfoNews.length - i;
+        if (viewBy == 'All') {
+            if (arrOfInfoNews[curr].PickInYear > YAxisMaxValueYear)
+            {
+                YAxisMaxValueYear = arrOfInfoNews[curr].PickInYear;
+            }
+        }
+        else
+        {
+            if (arrOfInfoNews[curr].PickInMonth > YAxisMaxValueMonth)
+            {
+                YAxisMaxValueMonth = arrOfInfoNews[curr].PickInMonth;
+            }
+        }
         execute(viewBy, arrOfInfoNews[curr].newsCategoryName);
     }
 }
@@ -1049,14 +1079,38 @@ function drawSmallMultiplesByCategory(viewBy)
 function drawSmallMultiplesByChosenCategory(viewBy) 
 {
     d3.select("body").selectAll("svg").remove();
+    YAxisMaxValueYear = 0;
+    YAxisMaxValueMonth = 0;
     for (i = 0; i < options.length; i++)
     {
+        for (j = 0; j < arrOfInfoNews.length; j++)
+        {
+            if (options[i] == arrOfInfoNews[j].newsCategoryName)
+            {
+                if (viewBy == 'All')
+                {
+                    if (arrOfInfoNews[j].PickInYear > YAxisMaxValueYear)
+                    {
+                        YAxisMaxValueYear = arrOfInfoNews[j].PickInYear;
+                    }
+                }
+                else
+                {
+                    if (arrOfInfoNews[j].PickInMonth > YAxisMaxValueMonth)
+                    {
+                        YAxisMaxValueMonth = arrOfInfoNews[j].PickInMonth;
+                    }
+                }
+            }
+        }
         execute(viewBy, options[i]);
     }
 }
 
 function drawSmallMultiplesForMostPopularyCategoriesInChosenTopic(viewBy, chosenTopic) {
     d3.select("body").selectAll("svg").remove();
+    YAxisMaxValueYear = 0;
+    YAxisMaxValueMonth = 0;
     if (chosenTopic == " Culture")
     {
         topic = culture;
@@ -1093,9 +1147,25 @@ function drawSmallMultiplesForMostPopularyCategoriesInChosenTopic(viewBy, chosen
     {
         topic = transportation;
     }
+    if (countOfDiagrams > topic.length)
+    {
+        countOfDiagrams = topic.length;
+    }
     for (i = 1; i < countOfDiagrams+1; i++)
     {
         var curr = topic.length - i;
+        if (viewBy == 'All') {
+            if (topic[curr].PickInYear > YAxisMaxValueYear)
+            {
+                YAxisMaxValueYear = topic[curr].PickInYear; // это нелогично, но работает...
+            }
+        }
+        else {
+            if (topic[curr].PickInMonth > YAxisMaxValueMonth)
+            {
+                YAxisMaxValueMonth = topic[curr].PickInMonth;
+            }
+        }
         execute(viewBy, topic[curr].newsCategoryName);
     }
 }
@@ -1152,6 +1222,8 @@ class infoNews
         this.newsCategoryName = name;
         this.newsYearCount = 0;
         this.topic = "";
+        this.PickInYear = 0;
+        this.PickInMonth = 0;
     }
 }
 
@@ -1186,13 +1258,6 @@ function sortBy(byThe)
     
 }
 
-/// это для того чтобы можно было рисовать выбранные категории TBD 
-function addToArrOfChosenCategories(newCategory)
-{
-    arrOfChosenCategories.push(newCategory);
-    //document.write(arrOfChosenCategories);
-}
-
 /// тут создается каждый отдельный массив 
 function createArrOfOneTopic(topic, TopicsArr)
 {
@@ -1219,7 +1284,11 @@ function createArrOfTopics()
     createArrOfOneTopic("Culture", culture);
     createArrOfOneTopic("Health", health);
     createArrOfOneTopic("Politics", politics);
-    createArrOfOneTopic("Sport", sport);
+    //for (z = 0; z < politics.length; z++) {
+    //    document.write(arrOfInfoNews[z].newsCategoryName + "$nbsp"+ arrOfInfoNews[z].newsYearCount + "<br>");
+    //    //document.write("{" + "<br>" + '"category": { "term": "' + arrOfInfoNews[z].newsCategoryName + '" },' + "<br>" + '"popularity": "' + arrOfInfoNews[z].newsYearCount + '"' + "<br>" + '},' + "<br>");
+    //}
+    //createArrOfOneTopic("Sport", sport);
     createArrOfOneTopic("Security", security);
     createArrOfOneTopic("Transportation", transportation);
 
