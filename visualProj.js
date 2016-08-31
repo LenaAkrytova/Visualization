@@ -391,7 +391,6 @@ var sport = [];
 var transport = [];
 
 var allTopics = Create2DArray();/// массив всех 9 массивов (которые выше) 
-//var allTopicsName = ['Culture', 'Education', 'Environment', 'Health', 'Economics', 'Politics', 'Security', 'Sport', 'Transport'];
 var arr; /// сюда складываем джейсона
 
 var YAxisMaxValueYear = 0;   /// максимальное значение на оси У
@@ -405,17 +404,6 @@ var flagForTopics = ''; /// показать 9 глобальных катего
 
 //////////////////////////////////////////////////////////////////////////
 ////   TBD    
-
-
-// в некоторых "суперкатегориях" кол-во категорий меньше 9 - проверить как оно будет работать
-// тут есть баг - почему-то двумерный массив allTopics размером 13, а не 9... хорошо бы поправить, но пока просто нужно иметь в виду, что считать нужно не до allTopics.length, а до 9
-// можно еще поменять customCategoriesList - у нас же есть этот массив
-// выбираемые категории отсортированы по популярности в обратном порядке
-// если выбрали "by topic",а потом хотим изменить кол-во, то нифига не получится )))
-// кнопки "data" и т.п. должны менять значение 
-
-
-
 
 d3.json("data/NewsItemsSmallData.js", initialize);
 
@@ -850,24 +838,17 @@ function execute(viewBy, currCategory)
         var height = 400,
         width = 400,
         margin = 40,
-        //YAxisMaxValue = getmax(view) + 10;
         YAxisMaxValue = (flag == 'byYear') ? YAxisMaxValueYear : YAxisMaxValueMonth;
         YAxisMaxValue += 10;
         data = [];
         //// создание объекта svg
-        //d3.select("body").selectAll("svg").remove();
         var svg = d3.select("body").append("svg")
                 .attr("class", "axis")
                 .attr("width", width)
                 .attr("height", height)
             //// длина оси X= ширина контейнера svg - отступ слева и справа
                 .attr("align", "center");
-        //svg.append("text")
-        //  .attr("x", width - 6)
-        //  .attr("y", height - 6)
-        //  .style("text-anchor", "end")
-        //  .text(category);
-
+    
 
         svg.append("text")
     .attr("class", "x label")
@@ -893,7 +874,7 @@ function execute(viewBy, currCategory)
             .attr("dy", ".75em")
             .style("float", "center")
             .style("font-size", "15px")
-            .style("text-decoration", "underline")
+            //.style("text-decoration", "underline")
             .text(currCategory);
 
 
@@ -905,15 +886,20 @@ function execute(viewBy, currCategory)
         //// длина оси Y = высота контейнера svg - отступ сверху и снизу
         var yAxisLength = height - 2 * margin;
         //// функция интерполяции значений на ось Х  
-        var scaleNum = 32;
-
-        if (flag == 'byYear') {
-            scaleNum = 12;
+        
+        if (flag == 'byYear')
+        {
+            dateFrom = new Date(2015, 11, 1);
+            dateTo = new Date(2016, 11, 31);
+        }
+        else {
+            dateFrom = createDateForX(0);
+            dateTo = createDateForX(31);
         }
 
-        var scaleX = d3.scale.linear()
-                    .domain([0, scaleNum])
-                    .range([0, xAxisLength]);
+        var scaleX = d3.time.scale()
+                .domain([dateFrom, dateTo])
+                .range([0, xAxisLength]);
         //// функция интерполяции значений на ось Y
         var scaleY = d3.scale.linear()
                     .domain([YAxisMaxValue, 0])
@@ -923,19 +909,35 @@ function execute(viewBy, currCategory)
         if (flag == 'byMonth') {
             for (i = 0; i < time[view].length; i++) {
                 var temp = time[view][i];
-                data.push({ x: scaleX(i) + margin, y: scaleY(temp) + margin });
+                var day = createDateForX(i);
+                data.push({ x: scaleX(day) + margin, y: scaleY(temp) + margin });
                 //// создаем ось X  
-            }
+                var xAxis = d3.svg.axis()
+                         .scale(scaleX)
+                         .orient("bottom")
+                         .ticks(6)
+                         .tickFormat(d3.time.format('%d.%b'));
+                }
         }
         else if (flag == 'byYear') {
             for (i = 0; i < yearTime.length; i++) {
-                data.push({ x: scaleX(i) + margin, y: scaleY(yearTime[i]) + margin });
-                //// создаем ось X  
+                var month;
+                if (i == 0) {
+                    month = new Date(2015, 11, 1);
+                }
+                else {
+                    month = new Date(2016, i - 1, 1);
+                }
+                data.push({ x: scaleX(month) + margin, y: scaleY(yearTime[i]) + margin });
             }
-        }
-        var xAxis = d3.svg.axis()
+            //// создаем ось X 
+            var xAxis = d3.svg.axis()
                      .scale(scaleX)
-                     .orient("bottom");
+                     .orient("bottom")
+                     .ticks(12)
+                     .tickFormat(d3.time.format('%b'));
+        }
+       
         //// создаем ось Y  
         var yAxis = d3.svg.axis()
                      .scale(scaleY)
@@ -952,22 +954,7 @@ function execute(viewBy, currCategory)
             .attr("transform", // сдвиг оси вниз и вправо на margin
                     "translate(" + margin + "," + margin + ")")
             .call(yAxis);
-        ////// создаем набор вертикальных линий для сетки   
-        //d3.selectAll("g.x-axis g.tick")
-        //    .append("line")
-        //    .classed("grid-line", true)
-        //    .attr("x1", 0)
-        //    .attr("y1", 0)
-        //    .attr("x2", 0)
-        //    .attr("y2", -(yAxisLength));
-        ////// рисуем горизонтальные линии координатной сетки
-        //d3.selectAll("g.y-axis g.tick")
-        //    .append("line")
-        //    .classed("grid-line", true)
-        //    .attr("x1", 0)
-        //    .attr("y1", 0)
-        //    .attr("x2", xAxisLength)
-        //    .attr("y2", 0);
+     
         //// функция, создающая по массиву точек линии
         var line = d3.svg.line()
                     .x(function (d) { return d.x; })
@@ -1119,7 +1106,7 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
         .attr("dy", ".75em")
         .style("float", "center")
         .style("font-size", "15px")
-        .style("text-decoration", "underline")
+        //.style("text-decoration", "underline")
         .text(nameOfTopic);
 
 
@@ -1127,15 +1114,20 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
     //// длина оси Y = высота контейнера svg - отступ сверху и снизу
     var yAxisLength = height - 2 * margin;
     //// функция интерполяции значений на ось Х  
-    var scaleNum = 32;
-
+    
     if (flag == 'byYear') {
-        scaleNum = 12;
+        dateFrom = new Date(2015, 11, 1);
+        dateTo = new Date(2016, 11, 31);
+    }
+    else {
+        dateFrom = createDateForX(0);
+        dateTo = createDateForX(31);
     }
 
-    var scaleX = d3.scale.linear()
-                .domain([0, scaleNum])
+    var scaleX = d3.time.scale() 
+                .domain([dateFrom, dateTo])
                 .range([0, xAxisLength]);
+
     //// функция интерполяции значений на ось Y
     var scaleY = d3.scale.linear()
                 .domain([YAxisMaxValue, 0])
@@ -1145,19 +1137,37 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
     if (flag == 'byMonth') {
         for (i = 0; i < time[view].length; i++) {
             var temp = time[view][i];
-            data.push({ x: scaleX(i) + margin, y: scaleY(temp) + margin });
-            //// создаем ось X  
+            var day = createDateForX(i);
+            
+            data.push({ x: scaleX(day) + margin, y: scaleY(temp) + margin });
+            //// создаем ось X 
+            var xAxis = d3.svg.axis()
+                         .scale(scaleX)
+                         .orient("bottom")
+                         .ticks(6)
+                         .tickFormat(d3.time.format('%d.%b'));
         }
     }
     else if (flag == 'byYear') {
         for (i = 0; i < yearTime.length; i++) {
-            data.push({ x: scaleX(i) + margin, y: scaleY(yearTime[i]) + margin });
+            var month;
+            if (i == 0) {
+                month = new Date(2015, 11, 1);
+            }
+            else
+            {
+                month = new Date(2016, i - 1, 1);
+            }
+            data.push({ x: scaleX(month) + margin, y: scaleY(yearTime[i]) + margin });
         }
-    }
+    
     //// создаем ось X  
     var xAxis = d3.svg.axis()
                  .scale(scaleX)
-                 .orient("bottom");
+                 .orient("bottom")
+                 .ticks(12)
+                 .tickFormat(d3.time.format('%b'));
+    }
     //// создаем ось Y  
     var yAxis = d3.svg.axis()
                  .scale(scaleY)
@@ -1174,26 +1184,13 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
         .attr("transform", // сдвиг оси вниз и вправо на margin
                 "translate(" + margin + "," + margin + ")")
         .call(yAxis);
-    ////// создаем набор вертикальных линий для сетки   
-    //d3.selectAll("g.x-axis g.tick")
-    //    .append("line")
-    //    .classed("grid-line", true)
-    //    .attr("x1", 0)
-    //    .attr("y1", 0)
-    //    .attr("x2", 0)
-    //    .attr("y2", -(yAxisLength));
-    ////// рисуем горизонтальные линии координатной сетки
-    //d3.selectAll("g.y-axis g.tick")
-    //    .append("line")
-    //    .classed("grid-line", true)
-    //    .attr("x1", 0)
-    //    .attr("y1", 0)
-    //    .attr("x2", xAxisLength)
-    //    .attr("y2", 0);
+
     //// функция, создающая по массиву точек линии
     var line = d3.svg.line()
                 .x(function (d) { return d.x; })
                 .y(function (d) { return d.y; });
+    
+
     //// добавляем путь
     svg.append("g").append("path")
     .attr("d", line(data))
@@ -1519,4 +1516,157 @@ function createArrOfTopics()
     //        document.write(allTopics[i][z].newsCategoryName + "&nbsp" + allTopics[i][z].newsYearCount + "<br>");
     //    }
     //}
+}
+
+function createDateForX(dayDate)
+{
+    if (date == ' January') {
+        if (dayDate == 0) {
+            day = new Date(2015, 11, 31);
+        }
+        else
+        {
+            day = new Date(2016, 0, dayDate);
+        }
+    }
+    else if (date == ' February')
+    {
+        if (dayDate == 0)
+        {
+            day = new Date(2016, 0, 31);
+        }
+        else
+        {
+            day = new Date(2016, 1, dayDate);
+        }
+    }
+    else if (date == ' March')
+    {
+        if (dayDate == 0)
+        {
+            day = new Date(2016, 1, 28);
+        }
+        else
+        {
+            day = new Date(2016, 2, dayDate);
+        }
+    }
+    else if (date == ' April')
+    {
+        if (dayDate == 0)
+        {
+            day = new Date(2016, 2, 31);
+        }
+        else
+        {
+            day = new Date(2016, 3, dayDate);
+        }
+    }
+    else if (date == ' May')
+    {
+        if (dayDate == 0) {
+            day = new Date(2016, 3, 30);
+        }
+        else
+        {
+            day = new Date(2016, 4, dayDate);
+        }
+    }
+    else if (date == ' June')
+    {
+        if (dayDate == 0) {
+            day = new Date(2016, 4, 31);
+        }
+        else {
+            day = new Date(2016, 5, dayDate);
+        }
+    }
+    else if (date == ' July')
+    {
+        if (dayDate == 0) {
+            day = new Date(2016, 5, 30);
+        }
+        else {
+            day = new Date(2016, 6, dayDate);
+        }
+    }
+    else if (date == ' August')
+    {
+        if (dayDate == 0) {
+            day = new Date(2016, 6, 31);
+        }
+        else {
+            day = new Date(2016, 7, dayDate);
+        }
+    }
+    return day;
+}
+
+function dayFrom()
+{
+    if (date == ' January') {
+        if (dayDate == 0) {
+            day = new Date(2015, 11, 31);
+        }
+        else {
+            day = new Date(2016, 0, dayDate);
+        }
+    }
+    else if (date == ' February') {
+        if (dayDate == 0) {
+            day = new Date(2016, 0, 31);
+        }
+        else {
+            day = new Date(2016, 1, dayDate);
+        }
+    }
+    else if (date == ' March') {
+        if (dayDate == 0) {
+            day = new Date(2016, 1, 28);
+        }
+        else {
+            day = new Date(2016, 2, dayDate);
+        }
+    }
+    else if (date == ' April') {
+        if (dayDate == 0) {
+            day = new Date(2016, 2, 31);
+        }
+        else {
+            day = new Date(2016, 3, dayDate);
+        }
+    }
+    else if (date == ' May') {
+        if (dayDate == 0) {
+            day = new Date(2016, 3, 30);
+        }
+        else {
+            day = new Date(2016, 4, dayDate);
+        }
+    }
+    else if (date == ' June') {
+        if (dayDate == 0) {
+            day = new Date(2016, 4, 31);
+        }
+        else {
+            day = new Date(2016, 5, dayDate);
+        }
+    }
+    else if (date == ' July') {
+        if (dayDate == 0) {
+            day = new Date(2016, 5, 30);
+        }
+        else {
+            day = new Date(2016, 6, dayDate);
+        }
+    }
+    else if (date == ' August') {
+        if (dayDate == 0) {
+            day = new Date(2016, 6, 31);
+        }
+        else {
+            day = new Date(2016, 7, dayDate);
+        }
+    }
+    return day;
 }
