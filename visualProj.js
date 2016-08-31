@@ -194,7 +194,7 @@ var health = [];
 var politics = [];
 var security = [];
 var sport = [];
-var transportation = [];
+var transport = [];
 
 var allTopics = Create2DArray();/// массив всех 9 массивов (которые выше) 
 //var allTopicsName = ['Culture', 'Education', 'Environment', 'Health', 'Economics', 'Politics', 'Security', 'Sport', 'Transport'];
@@ -262,7 +262,7 @@ function initialize(d)
 
     // создаем массив суперкатегорий
     arrOfSuperCategories = ["Politics",
-"Transportation",
+"transport",
 "Politics",
 "Environment",
 "Environment",
@@ -273,7 +273,7 @@ function initialize(d)
 "Economics",
 "Politics",
 "Environment",
-"Transportation",
+"transport",
 "Politics",
 "Politics",
 "Politics",
@@ -303,7 +303,7 @@ function initialize(d)
 "Politics",
 "Politics",
 "Politics",
-"Transportation",
+"transport",
 "Environment",
 "Politics",
 "Politics",
@@ -330,7 +330,7 @@ function initialize(d)
 "Sport",
 "Sport",
 "Economics",
-"Transportation",
+"transport",
 "Economics",
 "Sport",
 "Environment",
@@ -369,7 +369,7 @@ function initialize(d)
 "Politics",
 "Politics",
 "Politics",
-"Transportation",
+"transport",
 "Health",
 "Health",
 "Sport",
@@ -382,7 +382,7 @@ function initialize(d)
 "Culture",
 "Education",
 "Politics",
-"Transportation",
+"transport",
 "Politics",
 "Politics",
 "Environment",
@@ -437,7 +437,7 @@ function initialize(d)
 "Politics",
 "Economics",
 "Culture",
-"Transportation",
+"transport",
 "Security",
 "Security",
 "Politics",
@@ -558,6 +558,17 @@ function initialize(d)
     //}
     /// создаем массив глобальных категорий с подкатегориями (двумерный)
     createArrOfTopics();
+    //for (i = 0; i < 9; i++)
+    //{
+    //    var count = 0;
+    //    for (j = 0; j < allTopics[i].length; j++)
+    //    {
+    //        count += allTopics[i][j].newsYearCount;
+    //    }
+    //    document.write(count + "<br>");
+    //}
+
+
     drawAllTopics("All");
     
 }
@@ -782,15 +793,15 @@ function drawAllTopics(viewBy)
     /// так, конечно, делать нельзя...но...
     YAxisMaxValueYearForTopics = 16000;
     YAxisMaxValueMonthForTopics = 2200;
-    drawOneTopicInOneGraph(culture, "Culture", viewBy);
-    drawOneTopicInOneGraph(economics, "Economics", viewBy);
-    drawOneTopicInOneGraph(education, "Education", viewBy);
-    drawOneTopicInOneGraph(environment, "Environment", viewBy);
-    drawOneTopicInOneGraph(health, "Health", viewBy);
-    drawOneTopicInOneGraph(politics, "Politics", viewBy);
     drawOneTopicInOneGraph(security, "Security", viewBy);
+    drawOneTopicInOneGraph(politics, "Politics", viewBy);
+    drawOneTopicInOneGraph(health, "Health", viewBy);
+    drawOneTopicInOneGraph(environment, "Environment", viewBy);
+    drawOneTopicInOneGraph(economics, "Economics", viewBy);
+    drawOneTopicInOneGraph(culture, "Culture", viewBy);
     drawOneTopicInOneGraph(sport, "Sport", viewBy);
-    drawOneTopicInOneGraph(transportation, "Transportation", viewBy);
+    drawOneTopicInOneGraph(transport, "transport", viewBy);
+    drawOneTopicInOneGraph(education, "Education", viewBy);
 }
 
 function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
@@ -1115,37 +1126,37 @@ function drawSmallMultiplesForMostPopularyCategoriesInChosenTopic(viewBy, chosen
     {
         topic = culture;
     }
-    if (chosenTopic == " Economics")
+    else if (chosenTopic == " Economics")
     {
         topic = economics;
     }
-    if (chosenTopic == " Education")
+    else if (chosenTopic == " Education")
     {
         topic = education;
     }
-    if (chosenTopic == " Environment")
+    else if (chosenTopic == " Environment")
     {
         topic = environment;
     }
-    if (chosenTopic == " Health")
+    else if (chosenTopic == " Health")
     {
         topic = health;
     }
-    if (chosenTopic == " Politics")
+    else if (chosenTopic == " Politics")
     {
         topic = politics;
     }
-    if (chosenTopic == " Security")
+    else if (chosenTopic == " Security")
     {
         topic = security;
     }
-    if (chosenTopic == " Sport")
+    else if (chosenTopic == " Sport")
     {
         topic = sport;
     }
-    if (chosenTopic == " Transportation")
+    else if (chosenTopic == " Transport")
     {
-        topic = transportation;
+        topic = transport;
     }
     if (countOfDiagrams > topic.length)
     {
@@ -1284,23 +1295,19 @@ function createArrOfTopics()
     createArrOfOneTopic("Culture", culture);
     createArrOfOneTopic("Health", health);
     createArrOfOneTopic("Politics", politics);
-    //for (z = 0; z < politics.length; z++) {
-    //    document.write(arrOfInfoNews[z].newsCategoryName + "$nbsp"+ arrOfInfoNews[z].newsYearCount + "<br>");
-    //    //document.write("{" + "<br>" + '"category": { "term": "' + arrOfInfoNews[z].newsCategoryName + '" },' + "<br>" + '"popularity": "' + arrOfInfoNews[z].newsYearCount + '"' + "<br>" + '},' + "<br>");
-    //}
-    //createArrOfOneTopic("Sport", sport);
+    createArrOfOneTopic("Sport", sport);
     createArrOfOneTopic("Security", security);
-    createArrOfOneTopic("Transportation", transportation);
+    createArrOfOneTopic("transport", transport);
 
-    allTopics[0] = economics;
-    allTopics[1] = education;
-    allTopics[2] = environment;
-    allTopics[3] = culture;
-    allTopics[4] = health;
-    allTopics[5] = politics;
+    allTopics[0] = security;
+    allTopics[1] = politics;
+    allTopics[2] = health;
+    allTopics[3] = environment;
+    allTopics[4] = economics;
+    allTopics[5] = culture;
     allTopics[6] = sport;
-    allTopics[7] = security;
-    allTopics[8] = transportation;
+    allTopics[7] = transport;
+    allTopics[8] = education;
 
     /// оставлю это пока для примера как с этим массивом работать
     //for (var i = 0; i < 9; i++)
