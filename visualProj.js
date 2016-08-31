@@ -11,7 +11,201 @@ var countOfDiagrams = 9; /// сколько диаграмм показыват�
 var dropdownsData = {
     popularList: ['1 most popular', '2 most popular', '3 most popular', '4 most popular', '5 most popular', '6 most popular', '7 most popular', '8 most popular', '9 most popular', '10 most popular', '11 most popular', '12 most popular'],
     popularByTopicList: ['Culture', 'Economics', 'Education', 'Environment', 'Health', 'Politics', 'Security', 'Sport', 'Transport'],
-    customCategoriesList: ['300BillionEuroPackage', 'GMO', 'GunterOettinger', 'Eurostat', 'Demography', 'Sport', 'EuropeanCinema', 'JonathanHill', 'SchengenArea', 'InformationSociety', 'EBRD', 'TransuranicElements', 'MargretheVestager', 'RailTransport', 'MarosSefcovic', 'Competition-StateAid', 'AgricultureRuralDevelopment', 'Roaming', 'EuropeanNeighbourhoodPolicy', 'RatingsAgencies', 'HumanitarianAid', 'EPElection', 'eHealth', 'VytenisAndriukaitis', 'PublicProcurement', 'IntellectualProperty', 'ReferenceMaterials', 'Employment', 'PAC', 'PoliticalUnrest', 'Audit', 'EuropeanCulturalCapitals', 'EnvironmentalProtection', 'GenderEquality', 'EIB', 'SingleEuropeanSky', 'ScientificStrategy', 'KristalinaGeorgieva', 'CustomsUnion', 'TTIP', 'EuropeAid', 'RuralDevelopment', 'EADS', 'TechnologyForesight', 'VAT', 'Youth', 'ENLARGEMENT', 'Erasmus', 'ESA', 'ClimateAction', 'PetroleumRefineries', 'ForgeryMoney', 'MaritimeTransport', 'EducationFilter', 'JohannesHahn', 'Ecology', 'Development', 'EnergyMarketsandStrategies', 'BudgetoftheEU', 'EFSA', 'EPPoliticalGroups', 'EuropeanGreenCapitalAward', 'UGTMS', 'InformationSecurity', 'Lobbyism', 'NatashaBertaud', 'AnimalHealth', 'SocialSituation', 'OSH', 'TobaccoSmuggling', 'Accounting', 'PRESS', 'Drugs', 'Flooding', 'OHIM', 'RacismXenophobia', 'SmallMediumSizeBusinesses', 'MEP', 'MinaAndreeva', 'Counterfeiting', 'FundamentalRights', 'MobilityOfWorkers', 'JRCintheMedia', 'RareEarth', 'TEN-T-News', 'Protectionism', 'Culture', 'Competition-Antitrust', 'WorldEconomy', 'TradeOrganisations', 'ICRC', 'EUInternet', 'Eurozone', 'FoodSafety', 'Globalisation', 'GreenVehicles', 'FoodSecurityFoodAid', 'Innovation', 'PeaceProcess', 'ChildrensRights', 'G8', 'PrivateEquity', 'CrisisResponse', 'Guantanamo', 'MargaritisSchinas', 'G7', 'MilleniumGoals', 'NuclearSafety', 'CivilProtection', 'MARS-STAT', 'DutchPresidencyEU', 'DominantPosition', 'Eurocontrol', 'Discrimination', 'EMF_Health', 'ETF', 'MartinSchulz', 'EU-Canada', 'DigitalContent', 'FransTimmermans', 'Tourism', 'CouncilPresident', 'HumanTraffic', 'G20', 'Telecommunications', 'RegionalPolicy', 'PierreMoscovici', 'MaritimeSafetyEurope', 'FinancialEconomicCrime', 'ECB', 'CybersecurityAntifraud', 'BorderControl', 'Competition', 'FedericaMogherini', 'DimitrisAvramopoulos', 'EuropeanCouncil', 'MaritimeSafetyWorld', 'WorldBank', 'Europol', 'Competition-Mergers', 'PeaceKeeping', 'EU-Japan', 'ClimateChange', 'RenewableEnergies', 'CommunicableDiseases', 'NuclearMedecine', 'mahb', 'Dumping', 'Agriculture', 'FinancialServices', 'Euro', 'Biotechnology', 'PublicHealth', 'NaturalDisasters', 'Society', 'AirTransport', 'EU-Pacific', 'EU-Caribbean', 'NuclearEnergy', 'Jean-ClaudeJuncker', 'ImportsExports', 'EuropeanParliament', 'Environment', 'FightagainstFraud', 'AlternativeEnergy', 'FrontexAgency', 'NuclearDecommissioning', 'EU-China', 'Asylum', 'ManMadeDisasters', 'EU-Africa', 'UNSecretaryGeneral', 'EU-LatinAmerica', 'ECnews', 'Terrorism', 'TaxHaven', 'EU-Asia', 'EU-USA', 'SecurityCouncil', 'TAXUD', 'Nuclear', 'Immigration', 'FRA-EU', 'JRCSafeguards', 'JRCNuclearSecurity', 'UNbodies', 'Security', 'Conflict', 'TerroristAttack'],
+    //customCategoriesList: ['300BillionEuroPackage', 'GMO', 'GunterOettinger', 'Eurostat', 'Demography', 'Sport', 'EuropeanCinema', 'JonathanHill', 'SchengenArea', 'InformationSociety', 'EBRD', 'TransuranicElements', 'MargretheVestager', 'RailTransport', 'MarosSefcovic', 'Competition-StateAid', 'AgricultureRuralDevelopment', 'Roaming', 'EuropeanNeighbourhoodPolicy', 'RatingsAgencies', 'HumanitarianAid', 'EPElection', 'eHealth', 'VytenisAndriukaitis', 'PublicProcurement', 'IntellectualProperty', 'ReferenceMaterials', 'Employment', 'PAC', 'PoliticalUnrest', 'Audit', 'EuropeanCulturalCapitals', 'EnvironmentalProtection', 'GenderEquality', 'EIB', 'SingleEuropeanSky', 'ScientificStrategy', 'KristalinaGeorgieva', 'CustomsUnion', 'TTIP', 'EuropeAid', 'RuralDevelopment', 'EADS', 'TechnologyForesight', 'VAT', 'Youth', 'ENLARGEMENT', 'Erasmus', 'ESA', 'ClimateAction', 'PetroleumRefineries', 'ForgeryMoney', 'MaritimeTransport', 'EducationFilter', 'JohannesHahn', 'Ecology', 'Development', 'EnergyMarketsandStrategies', 'BudgetoftheEU', 'EFSA', 'EPPoliticalGroups', 'EuropeanGreenCapitalAward', 'UGTMS', 'InformationSecurity', 'Lobbyism', 'NatashaBertaud', 'AnimalHealth', 'SocialSituation', 'OSH', 'TobaccoSmuggling', 'Accounting', 'PRESS', 'Drugs', 'Flooding', 'OHIM', 'RacismXenophobia', 'SmallMediumSizeBusinesses', 'MEP', 'MinaAndreeva', 'Counterfeiting', 'FundamentalRights', 'MobilityOfWorkers', 'JRCintheMedia', 'RareEarth', 'TEN-T-News', 'Protectionism', 'Culture', 'Competition-Antitrust', 'WorldEconomy', 'TradeOrganisations', 'ICRC', 'EUInternet', 'Eurozone', 'FoodSafety', 'Globalisation', 'GreenVehicles', 'FoodSecurityFoodAid', 'Innovation', 'PeaceProcess', 'ChildrensRights', 'G8', 'PrivateEquity', 'CrisisResponse', 'Guantanamo', 'MargaritisSchinas', 'G7', 'MilleniumGoals', 'NuclearSafety', 'CivilProtection', 'MARS-STAT', 'DutchPresidencyEU', 'DominantPosition', 'Eurocontrol', 'Discrimination', 'EMF_Health', 'ETF', 'MartinSchulz', 'EU-Canada', 'DigitalContent', 'FransTimmermans', 'Tourism', 'CouncilPresident', 'HumanTraffic', 'G20', 'Telecommunications', 'RegionalPolicy', 'PierreMoscovici', 'MaritimeSafetyEurope', 'FinancialEconomicCrime', 'ECB', 'CybersecurityAntifraud', 'BorderControl', 'Competition', 'FedericaMogherini', 'DimitrisAvramopoulos', 'EuropeanCouncil', 'MaritimeSafetyWorld', 'WorldBank', 'Europol', 'Competition-Mergers', 'PeaceKeeping', 'EU-Japan', 'ClimateChange', 'RenewableEnergies', 'CommunicableDiseases', 'NuclearMedecine', 'mahb', 'Dumping', 'Agriculture', 'FinancialServices', 'Euro', 'Biotechnology', 'PublicHealth', 'NaturalDisasters', 'Society', 'AirTransport', 'EU-Pacific', 'EU-Caribbean', 'NuclearEnergy', 'Jean-ClaudeJuncker', 'ImportsExports', 'EuropeanParliament', 'Environment', 'FightagainstFraud', 'AlternativeEnergy', 'FrontexAgency', 'NuclearDecommissioning', 'EU-China', 'Asylum', 'ManMadeDisasters', 'EU-Africa', 'UNSecretaryGeneral', 'EU-LatinAmerica', 'ECnews', 'Terrorism', 'TaxHaven', 'EU-Asia', 'EU-USA', 'SecurityCouncil', 'TAXUD', 'Nuclear', 'Immigration', 'FRA-EU', 'JRCSafeguards', 'JRCNuclearSecurity', 'UNbodies', 'Security', 'Conflict', 'TerroristAttack'],
+    customCategoriesList: ['300BillionEuroPackage',
+'Accounting',
+'Agriculture',
+'AgricultureRuralDevelopment',
+'AirTransport',
+'AlternativeEnergy',
+'AnimalHealth',
+'Asylum',
+'Audit',
+'Biotechnology',
+'BluefinTuna',
+'BorderControl',
+'BudgetoftheEU',
+'ChildrensRights',
+'Citizenship',
+'CivilProtection',
+'ClimateAction',
+'ClimateChange',
+'CommunicableDiseases',
+'Competition',
+'Competition-Antitrust',
+'Competition-Mergers',
+'Competition-StateAid',
+'Conflict',
+'ConsumerPolicy',
+'CouncilPresident',
+'Counterfeiting',
+'CrisisResponse',
+'Culture',
+'CustomsUnion',
+'CybersecurityAntifraud',
+'Demography',
+'Development',
+'DigitalContent',
+'DimitrisAvramopoulos',
+'Discrimination',
+'DominantPosition',
+'Drugs',
+'Dumping',
+'DutchPresidencyEU',
+'EADS',
+'EBRD',
+'ECB',
+'ECnews',
+'EFSA',
+'EIB',
+'EMF_Health',
+'ENLARGEMENT',
+'EPElection',
+'EPPoliticalGroups',
+'ESA',
+'ETF',
+'EU-Africa',
+'EU-Asia',
+'EU-Canada',
+'EU-Caribbean',
+'EU-China',
+'EU-Japan',
+'EU-LatinAmerica',
+'EU-Pacific',
+'EU-USA',
+'EUInternet',
+'Ecology',
+'EducationFilter',
+'Employment',
+'EnergyMarketsandStrategies',
+'Environment',
+'EnvironmentalProtection',
+'Erasmus',
+'Euro',
+'Eurocontrol',
+'EuropeAid',
+'EuropeanCinema',
+'EuropeanCouncil',
+'EuropeanCulturalCapitals',
+'EuropeanGreenCapitalAward',
+'EuropeanNeighbourhoodPolicy',
+'EuropeanParliament',
+'Europol',
+'Eurostat',
+'Eurozone',
+'FRA-EU',
+'FedericaMogherini',
+'FightagainstFraud',
+'FinancialEconomicCrime',
+'FinancialServices',
+'Flooding',
+'FoodSafety',
+'FoodSecurityFoodAid',
+'ForgeryMoney',
+'FransTimmermans',
+'FrontexAgency',
+'FundamentalRights',
+'G20',
+'G7',
+'G8',
+'GMO',
+'GenderEquality',
+'Globalisation',
+'GreenVehicles',
+'Guantanamo',
+'GunterOettinger',
+'HumanTraffic',
+'HumanitarianAid',
+'ICRC',
+'Immigration',
+'ImportsExports',
+'InformationSecurity',
+'InformationSociety',
+'Innovation',
+'IntellectualProperty',
+'JRCNuclearSecurity',
+'JRCSafeguards',
+'JRCintheMedia',
+'Jean-ClaudeJuncker',
+'JohannesHahn',
+'JonathanHill',
+'KristalinaGeorgieva',
+'KyotoProtocol',
+'Lobbyism',
+'MARS-STAT',
+'MEP',
+'ManMadeDisasters',
+'MargaritisSchinas',
+'MargretheVestager',
+'MaritimeSafetyEurope',
+'MaritimeSafetyWorld',
+'MaritimeTransport',
+'MarosSefcovic',
+'MartinSchulz',
+'MilleniumGoals',
+'MinaAndreeva',
+'MobilityOfWorkers',
+'NatashaBertaud',
+'NaturalDisasters',
+'Nuclear',
+'NuclearDecommissioning',
+'NuclearEnergy',
+'NuclearMedecine',
+'NuclearSafety',
+'OHIM',
+'OSH',
+'PAC',
+'PRESS',
+'PeaceKeeping',
+'PeaceProcess',
+'PetroleumRefineries',
+'PierreMoscovici',
+'PoliticalUnrest',
+'PrivateEquity',
+'Protectionism',
+'PublicHealth',
+'PublicProcurement',
+'RacismXenophobia',
+'RailTransport',
+'RareEarth',
+'RatingsAgencies',
+'ReferenceMaterials',
+'RegionalPolicy',
+'RenewableEnergies',
+'Roaming',
+'RuralDevelopment',
+'SchengenArea',
+'ScientificStrategy',
+'Security',
+'SecurityCouncil',
+'SingleEuropeanSky',
+'SmallMediumSizeBusinesses',
+'SocialSituation',
+'Society',
+'Sport',
+'TAXUD',
+'TEN-T-News',
+'TTIP',
+'TaxHaven',
+'TechnologyForesight',
+'Telecommunications',
+'Terrorism',
+'TerroristAttack',
+'TobaccoSmuggling',
+'Tourism',
+'TradeOrganisations',
+'TransuranicElements',
+'UGTMS',
+'UNSecretaryGeneral',
+'UNbodies',
+'VAT',
+'VytenisAndriukaitis',
+'Whaling',
+'WorldBank',
+'WorldEconomy',
+'Youth',
+'eHealth',
+'mahb'],
     datesList: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August']
 };
 fillUL(dropdownsData.popularList, document.getElementById("popular"));
@@ -543,7 +737,7 @@ function initialize(d)
     }
 
     /// сортируем по популярности для дефолтного фильтра
-    sortBy("popularity");
+    sortBy("popularity", arrOfInfoNews);
     //sortBy("category");
     //eto chtoby raspechatat' v "tipa json" formate
     //document.write("[" + "<br>");
@@ -1092,12 +1286,14 @@ function drawSmallMultiplesByChosenCategory(viewBy)
     d3.select("body").selectAll("svg").remove();
     YAxisMaxValueYear = 0;
     YAxisMaxValueMonth = 0;
+    var optionsArr = [];
     for (i = 0; i < options.length; i++)
     {
         for (j = 0; j < arrOfInfoNews.length; j++)
         {
             if (options[i] == arrOfInfoNews[j].newsCategoryName)
             {
+                optionsArr[i] = arrOfInfoNews[j];
                 if (viewBy == 'All')
                 {
                     if (arrOfInfoNews[j].PickInYear > YAxisMaxValueYear)
@@ -1114,7 +1310,12 @@ function drawSmallMultiplesByChosenCategory(viewBy)
                 }
             }
         }
-        execute(viewBy, options[i]);
+    }
+    sortBy("popularity", optionsArr);
+    for (i = 1; i < optionsArr.length+1; i++)
+    {
+        var curr = optionsArr.length - i;
+        execute(viewBy, optionsArr[curr].newsCategoryName);
     }
 }
 
@@ -1238,11 +1439,12 @@ class infoNews
     }
 }
 
-function sortBy(byThe)
+function sortBy(byThe, arr)
 {
     if (byThe == "popularity")
     {
-        arrOfInfoNews.sort(function (a, b) {
+        arr.sort(function (a, b)
+        {
             if (a.newsYearCount > b.newsYearCount) {
                 return 1;
             }
@@ -1255,7 +1457,7 @@ function sortBy(byThe)
     }
     else if(byThe == "category")
     {
-        arrOfInfoNews.sort(function (a, b) {
+        arr.sort(function (a, b) {
             if (a.newsCategoryName > b.newsCategoryName) {
                 return 1;
             }
@@ -1283,7 +1485,7 @@ function createArrOfOneTopic(topic, TopicsArr)
              count++;
         }
     }
-    sortBy("popularity");
+    sortBy("popularity", arrOfInfoNews);
 }
 
 /// а тут собираем их в кучку
