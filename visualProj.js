@@ -758,22 +758,22 @@ function execute(viewBy, currCategory)
             .attr("transform", // сдвиг оси вниз и вправо на margin
                     "translate(" + margin + "," + margin + ")")
             .call(yAxis);
-        //// создаем набор вертикальных линий для сетки   
-        d3.selectAll("g.x-axis g.tick")
-            .append("line")
-            .classed("grid-line", true)
-            .attr("x1", 0)
-            .attr("y1", 0)
-            .attr("x2", 0)
-            .attr("y2", -(yAxisLength));
-        //// рисуем горизонтальные линии координатной сетки
-        d3.selectAll("g.y-axis g.tick")
-            .append("line")
-            .classed("grid-line", true)
-            .attr("x1", 0)
-            .attr("y1", 0)
-            .attr("x2", xAxisLength)
-            .attr("y2", 0);
+        ////// создаем набор вертикальных линий для сетки   
+        //d3.selectAll("g.x-axis g.tick")
+        //    .append("line")
+        //    .classed("grid-line", true)
+        //    .attr("x1", 0)
+        //    .attr("y1", 0)
+        //    .attr("x2", 0)
+        //    .attr("y2", -(yAxisLength));
+        ////// рисуем горизонтальные линии координатной сетки
+        //d3.selectAll("g.y-axis g.tick")
+        //    .append("line")
+        //    .classed("grid-line", true)
+        //    .attr("x1", 0)
+        //    .attr("y1", 0)
+        //    .attr("x2", xAxisLength)
+        //    .attr("y2", 0);
         //// функция, создающая по массиву точек линии
         var line = d3.svg.line()
                     .x(function (d) { return d.x; })
@@ -980,22 +980,22 @@ function drawOneTopicInOneGraph(TopicsArr, nameOfTopic, viewBy)
         .attr("transform", // сдвиг оси вниз и вправо на margin
                 "translate(" + margin + "," + margin + ")")
         .call(yAxis);
-    //// создаем набор вертикальных линий для сетки   
-    d3.selectAll("g.x-axis g.tick")
-        .append("line")
-        .classed("grid-line", true)
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", 0)
-        .attr("y2", -(yAxisLength));
-    //// рисуем горизонтальные линии координатной сетки
-    d3.selectAll("g.y-axis g.tick")
-        .append("line")
-        .classed("grid-line", true)
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", xAxisLength)
-        .attr("y2", 0);
+    ////// создаем набор вертикальных линий для сетки   
+    //d3.selectAll("g.x-axis g.tick")
+    //    .append("line")
+    //    .classed("grid-line", true)
+    //    .attr("x1", 0)
+    //    .attr("y1", 0)
+    //    .attr("x2", 0)
+    //    .attr("y2", -(yAxisLength));
+    ////// рисуем горизонтальные линии координатной сетки
+    //d3.selectAll("g.y-axis g.tick")
+    //    .append("line")
+    //    .classed("grid-line", true)
+    //    .attr("x1", 0)
+    //    .attr("y1", 0)
+    //    .attr("x2", xAxisLength)
+    //    .attr("y2", 0);
     //// функция, создающая по массиву точек линии
     var line = d3.svg.line()
                 .x(function (d) { return d.x; })
